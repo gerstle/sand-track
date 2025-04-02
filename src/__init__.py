@@ -2,13 +2,17 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_bootstrap import Bootstrap5
 import os
+import logging
+
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 db = SQLAlchemy()
 
 
 def create_app():
-    print("------------------ creating app!")
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
@@ -16,7 +20,9 @@ def create_app():
 
     db.init_app(app)
     Migrate(app, db)
-    from src.models import user, task
+    Bootstrap5(app)
+
+    from src.models import user, task, turnpoint
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -27,12 +33,11 @@ def create_app():
         # since the user_id is just the primary key of our user table, use it in the query for the user
         return user.User.query.get(int(user_id))
 
-    # blueprint for auth routes in our app
-    from .auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint)
-
-    # blueprint for non-auth parts of app
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
+    from .auth import auth
+    from .main import main
+    from .tasks import tasks
+    app.register_blueprint(auth)
+    app.register_blueprint(main)
+    app.register_blueprint(tasks)
 
     return app

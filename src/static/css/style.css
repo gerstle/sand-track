@@ -1,7 +1,2 @@
-h1 {
-    border: 2px #eee solid;
-    color: brown;
-    text-align: center;
-    padding: 10px;
-}
-
+body { background: #00f1cd !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+[data-href] { cursor: pointer; }

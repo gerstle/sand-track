@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="clearfix">
+    <div class="float-start">
+        <h1>Task: {{ task.name }}</h1>
+    </div>
+</div>
+<div class="clearfix">
+    <div class="float-start">
+        <h2>{{ task.description }}</h2>
+    </div>
+</div>
+
+<p>Turnpoints</p>
+<table class="table table-hover table-striped">
+    <thead>
+    <tr>
+        <th class="text-start"></th>
+        <th class="text-start">name</th>
+        <th class="text-start">radius (meters)</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for tp in task.turnpoints %}
+    <tr>
+        <td class="text-start">{{ tp.tag or ""}}</td>
+        <td class="text-start">{{ tp.name }}</td>
+        <td class="text-start">{{ tp.radius }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
