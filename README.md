@@ -1,33 +1,10 @@
-# run
+# sand-track
 
-```shell
-SECRET_KEY=A3BA7347-DD8D-466C-AE4A-192E340FADFA \
-DB_URI='sqlite:///sand-track.sqlite' \
-uv run -- flask --app src --debug run -p 3000
-```
+Just a little thing to help us run task competitions at local flying sites.
 
-# DB
+# local dev
 
-## init migrations
-
-```shell
-SECRET_KEY=A3BA7347-DD8D-466C-AE4A-192E340FADFA \
-DB_URI='sqlite:///sand-track.sqlite' \
-uv run -- flask --app src db init -d src/migrations
-```
-
-## create migration
-
-```shell
-SECRET_KEY=A3BA7347-DD8D-466C-AE4A-192E340FADFA \
-DB_URI='sqlite:///sand-track.sqlite' \
-uv run -- flask --app src db migrate -m "init" -d src/migrations
-```
-
-## upgrade
-
-```shell
-SECRET_KEY=A3BA7347-DD8D-466C-AE4A-192E340FADFA \
-DB_URI='sqlite:///sand-track.sqlite' \
-uv run -- flask --app src db upgrade -d src/migrations
-```
+1. `echo "SECRET_KEY='something-super-secret'" > .env`
+2. `uv sync`
+3. `uv run -- flask --app src db upgrade -d src/migrations`
+4. `uv run -- flask --app src run -p 3000`

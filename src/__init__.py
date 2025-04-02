@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap5
-import os
 import logging
 
 logging.basicConfig()
@@ -15,8 +14,7 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DB_URI']
+    app.config.from_pyfile('config.py')
 
     db.init_app(app)
     Migrate(app, db)
