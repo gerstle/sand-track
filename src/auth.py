@@ -1,17 +1,23 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask_login import login_required, logout_user
 from flask_login import login_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from .models.user import User
+
 from src import db
-from flask_login import login_required, current_user, logout_user
+from . import login_manager
+from .models.user import User
 
-auth = Blueprint('auth', __name__)
+auth_bp = Blueprint('auth', __name__)
 
-@auth.route('/login')
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@auth_bp.route('/login')
 def login():
     return render_template('login.html')
 
-@auth.route('/login', methods=['POST'])
+@auth_bp.route('/login', methods=['POST'])
 def login_post():
     email = request.form.get('email')
     password = request.form.get('password')
@@ -29,11 +35,11 @@ def login_post():
     login_user(user, remember=remember)
     return redirect(url_for('main.profile'))
 
-@auth.route('/signup')
+@auth_bp.route('/signup')
 def signup():
     return render_template('signup.html')
 
-@auth.route('/signup', methods=['POST'])
+@auth_bp.route('/signup', methods=['POST'])
 def signup_post():
     email = request.form.get('email')
     name = request.form.get('name')
@@ -53,7 +59,7 @@ def signup_post():
     db.session.commit()
     return redirect(url_for('auth.login'))
 
-@auth.route('/logout')
+@auth_bp.route('/logout')
 @login_required
 def logout():
     logout_user()

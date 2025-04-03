@@ -1,14 +1,16 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager
-from flask_bootstrap import Bootstrap5
 import logging
+
+from flask import Flask
+from flask_bootstrap import Bootstrap5
+from flask_login import LoginManager
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 db = SQLAlchemy()
+login_manager = LoginManager()
 
 
 def create_app():
@@ -20,22 +22,19 @@ def create_app():
     Migrate(app, db)
     Bootstrap5(app)
 
-    from src.models import user, task, turnpoint
+    # load models/DB
+    from src.models import user, waypoint_group, waypoint, task, turnpoint, entry
 
-    login_manager = LoginManager()
+    # load auth and routes
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
-
-    @login_manager.user_loader
-    def load_user(user_id):
-        # since the user_id is just the primary key of our user table, use it in the query for the user
-        return user.User.query.get(int(user_id))
-
-    from .auth import auth
-    from .main import main
-    from .tasks import tasks
-    app.register_blueprint(auth)
-    app.register_blueprint(main)
-    app.register_blueprint(tasks)
+    from .auth import auth_bp
+    from .main import main_bp
+    from .tasks import tasks_bp
+    from .setup import setup_bp
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(main_bp)
+    app.register_blueprint(tasks_bp)
+    app.register_blueprint(setup_bp)
 
     return app

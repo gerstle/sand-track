@@ -1,24 +1,28 @@
-from flask import Flask, render_template, request, url_for, flash, redirect
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
 from flask import Blueprint
-from flask_login import login_required, current_user
+from flask import render_template
+from sqlalchemy import or_
+
 from src import db
 from src.models.task import Task
-from datetime import datetime
-import pytz
 
-tasks = Blueprint('task', __name__)
-PST = pytz.timezone("US/Pacific")
+tasks_bp = Blueprint('task', __name__)
 
-@tasks.route('/tasks')
+@tasks_bp.route('/tasks')
 def index():
-    now = datetime.utcnow().astimezone(PST)
+    now = datetime.now(tz=ZoneInfo("America/Los_Angeles"))
     now = datetime(now.year, now.month, now.day, 0, 0, 0)
-    print(f"----------------------------- time: {now}")
     return render_template(
         'tasks/index.html',
-        tasks=db.session.query(Task).order_by(Task.id).filter(Task.start <= now, Task.end > now)
+        tasks=db.session.query(Task).order_by(Task.id).filter(or_(Task.start >= now, Task.end >= now))
     )
 
-@tasks.route('/tasks/<int:task_id>')
+@tasks_bp.route('/tasks/<int:task_id>')
 def detail(task_id: int):
-    return render_template('tasks/detail.html', task=db.session.query(Task).get(task_id))
+    task = db.session.query(Task).get(task_id)
+    task.turnpoints.sort(key=lambda it: it.order)
+    task.entries.sort(key=lambda it: it.end - it.start)
+
+    return render_template('tasks/detail.html', task=task)

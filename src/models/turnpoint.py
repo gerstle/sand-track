@@ -9,6 +9,7 @@ class Turnpoint(db.Model):
     task_id: Mapped[int] = mapped_column(ForeignKey('task.id'))
     task: Mapped["Task"] = relationship(back_populates="turnpoints")
     order: Mapped[int]
-    name: Mapped[str]
+    waypoint_id: Mapped[int] = mapped_column(ForeignKey('waypoint.id'))
+    waypoint: Mapped["Waypoint"] = relationship()
     radius: Mapped[int]
     tag: Mapped[Optional[str]]

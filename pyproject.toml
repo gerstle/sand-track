@@ -7,9 +7,10 @@ requires-python = ">=3.9"
 dependencies = [
     "bootstrap-flask>=2.4.2",
     "dotenv>=0.9.9",
+    "faker>=37.1.0",
     "flask>=3.1.0",
     "flask-login>=0.6.3",
     "flask-migrate>=4.1.0",
     "flask-sqlalchemy>=3.1.1",
-    "pytz>=2025.2",
+    "pyyaml>=6.0.2",
 ]

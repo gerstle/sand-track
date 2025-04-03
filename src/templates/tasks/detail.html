@@ -8,27 +8,72 @@
 </div>
 <div class="clearfix">
     <div class="float-start">
-        <h2>{{ task.description }}</h2>
+        <h2>{{ task.description or "" }}</h2>
     </div>
 </div>
 
-<p>Turnpoints</p>
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th class="text-start"></th>
-        <th class="text-start">name</th>
-        <th class="text-start">radius (meters)</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for tp in task.turnpoints %}
-    <tr>
-        <td class="text-start">{{ tp.tag or ""}}</td>
-        <td class="text-start">{{ tp.name }}</td>
-        <td class="text-start">{{ tp.radius }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+
+<p class="text-start">
+    <a class="btn btn-secondary" data-bs-toggle="collapse" href="#turnpoints" role="button" aria-expanded="false"
+       aria-controls="turnpoints">turnpoints</a>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#results"
+            aria-expanded="false" aria-controls="results">results
+    </button>
+</p>
+<div class="row mb-2">
+    <div class="col px-3">
+        <div class="collapse multi-collapse show" id="turnpoints">
+            <div class="card card-body">
+                <p class="text-start">Turnpoints</p>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="text-start"></th>
+                        <th class="text-start">name</th>
+                        <th class="text-start">radius (meters)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for tp in task.turnpoints %}
+                    <tr>
+                        <td class="text-start">{{ tp.tag or ""}}</td>
+                        <td class="text-start">{{ tp.waypoint.name }}</td>
+                        <td class="text-start">{{ tp.radius }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col px-3">
+        <div class="collapse multi-collapse show" id="results">
+            <div class="card card-body">
+                <p class="text-start">Results</p>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="text-start">place </th>
+                        <th class="text-start">name</th>
+                        <th class="text-start d-none d-lg-block">start</th>
+                        <th class="text-start">time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for e in task.entries %}
+                    <tr>
+                        <td class="text-start">{{ loop.index0 + 1 }}</td>
+                        <td class="text-start">{{ e.name }}</td>
+                        <td class="text-start d-none d-lg-block">{{ e.start }}</td>
+                        <td class="text-start">{{ e.end - e.start}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
