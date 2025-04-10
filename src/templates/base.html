@@ -24,8 +24,9 @@
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('main.index') }}">home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('task.index') }}">tasks</a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('main.index') }}">home</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('tasks.index') }}">tasks</a></li>
 
                 {% if current_user.is_authenticated %}
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('main.profile') }}">profile</a></li>
@@ -40,10 +41,16 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">Files</a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{ url_for('static', filename='downloads/sand-city-v1.wpt') }}">sand-city-v1.wpt</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('static', filename='downloads/xc-league-2024.wpt') }}">xc-league-2024.wpt</a></li>
+                        <li><a class="dropdown-item"
+                               href="{{ url_for('static', filename='downloads/sand-city-v1.wpt') }}">sand-city-v1.wpt</a>
+                        </li>
+                        <li><a class="dropdown-item"
+                               href="{{ url_for('static', filename='downloads/xc-league-2024.wpt') }}">xc-league-2024.wpt</a>
+                        </li>
 
-                        <li><hr class="dropdown-divider"/></li>
+                        <li>
+                            <hr class="dropdown-divider"/>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -52,6 +59,15 @@
 </nav>
 <div class="container">
     <div class="text-center mt-5">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </div>
 </div>

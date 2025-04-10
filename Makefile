@@ -1,3 +1,5 @@
+.PHONY: test
+
 db-reset-migrations:
 	rm -rf instance && rm src/migrations/versions/* ;  uv run -- flask --app src db migrate -m "initial" -d src/migrations
 
@@ -11,3 +13,8 @@ db-seed:
 
 start:
 	uv run -- flask --app src run --debug -p 3000
+
+test:
+	source .venv/bin/activate; \
+	python -m unittest discover; \
+	deactivate

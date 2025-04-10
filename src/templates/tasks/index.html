@@ -15,7 +15,7 @@
     </thead>
     <tbody>
     {% for t in tasks %}
-    <tr class="position-relative clickable-row" data-href="tasks/{{ t.id }}">
+    <tr class="position-relative clickable-row" data-href={{url_for('tasks.detail', task_id=t.id)}}>
         <th scope="row">{{ t.name }}</th>
         <td>{{ t.start.strftime("%Y-%m-%d %H:%M:%S %z") }}</td>
         <td>{{ t.end.strftime("%Y-%m-%d %H:%M:%S %z") }}</td>

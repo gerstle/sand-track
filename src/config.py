@@ -6,3 +6,4 @@ load_dotenv(path.join(basedir, '.env'))
 
 SECRET_KEY = environ.get('SECRET_KEY')
 SQLALCHEMY_DATABASE_URI = 'sqlite:///sand-track.sqlite'
+UPLOAD_FOLDER = '/tmp'

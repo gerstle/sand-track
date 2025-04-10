@@ -14,8 +14,12 @@
 
 
 <p class="text-start">
-    <a class="btn btn-secondary" data-bs-toggle="collapse" href="#turnpoints" role="button" aria-expanded="false"
-       aria-controls="turnpoints">turnpoints</a>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitTracklogModal">submit
+        your tracklog
+    </button>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#turnpoints"
+            aria-expanded="false" aria-controls="turnpoints">turnpoints
+    </button>
     <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#results"
             aria-expanded="false" aria-controls="results">results
     </button>
@@ -55,7 +59,7 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th class="text-start">place </th>
+                        <th class="text-start">place</th>
                         <th class="text-start">name</th>
                         <th class="text-start d-none d-lg-block">start</th>
                         <th class="text-start">time</th>
@@ -76,4 +80,28 @@
         </div>
     </div>
 </div>
+
+<div class="modal" tabindex="-1" id="submitTracklogModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method=post enctype=multipart/form-data action="{{ url_for('tasks.submit_tracklog', task_id=task.id) }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Submit Tracklog</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-start">
+                    <div class="mb-3">
+                        <label for="tracklogFile" class="form-label">igc tracklog file</label>
+                        <input class="form-control" type="file" id="tracklogFile" name="tracklogFile">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

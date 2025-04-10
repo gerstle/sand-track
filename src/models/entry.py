@@ -16,3 +16,7 @@ class Entry(db.Model):
     submitted: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
     start: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     end: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    status: Mapped[str]
+
+    def __repr__(self):
+        return f"<Entry(name='{self.name}', task_id='{self.task_id}', submitted={self.submitted}, start='{self.start}', end='{self.end}', status='{self.status}')>"
