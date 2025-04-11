@@ -202,6 +202,6 @@ def _entries(tasks: List[Task]) -> List[Entry]:
         for index in range(random.randint(3, 8)):
             start = fake.date_between_dates(date_start=task.start, date_end=task.end)
             end = fake.date_between_dates(date_start=start, date_end=task.end)
-            rv.append(Entry(task_id=task.id, name=fake.name(), start=start, end=end))
+            rv.append(Entry(task_id=task.id, name=fake.name(), start=start, end=end, time_seconds = (end - start).total_seconds(), status=random.choice(['goal', 'missed goal'])))
 
     return rv

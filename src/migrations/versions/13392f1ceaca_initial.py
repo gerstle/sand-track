@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: 8d0ed10e1f07
+Revision ID: 13392f1ceaca
 Revises: 
-Create Date: 2025-04-09 21:12:53.348059
+Create Date: 2025-04-10 21:51:40.490881
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '8d0ed10e1f07'
+revision = '13392f1ceaca'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -48,8 +48,10 @@ def upgrade():
     sa.Column('start', sa.DateTime(timezone=True), nullable=True),
     sa.Column('end', sa.DateTime(timezone=True), nullable=True),
     sa.Column('status', sa.String(), nullable=False),
+    sa.Column('time_seconds', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['task_id'], ['task.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name', 'task_id')
     )
     op.create_table('waypoint',
     sa.Column('id', sa.Integer(), nullable=False),

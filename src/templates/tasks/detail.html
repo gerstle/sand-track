@@ -70,8 +70,8 @@
                     <tr>
                         <td class="text-start">{{ loop.index0 + 1 }}</td>
                         <td class="text-start">{{ e.name }}</td>
-                        <td class="text-start d-none d-lg-block">{{ e.start }}</td>
-                        <td class="text-start">{{ e.end - e.start}}</td>
+                        <td class="text-start d-none d-lg-block">{{ e.start or '-' }}</td>
+                        <td class="text-start">{{ e.elapsed() or '-' }}</td>
                     </tr>
                     {% endfor %}
                     </tbody>
