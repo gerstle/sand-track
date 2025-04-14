@@ -35,10 +35,14 @@ def index():
 @tasks_bp.route('/<int:task_id>')
 def detail(task_id: int):
     task = db.session.query(Task).get(task_id)
-
     task.entries.sort(key=_sort_entries)
 
-    return render_template('tasks/detail.html', task=task)
+    entry = None
+    entry_id = request.args.get('entry_id')
+    if entry_id:
+        entry = db.session.query(Entry).get(entry_id)
+
+    return render_template('tasks/detail.html', task=task, entry=entry)
 
 
 def _sort_entries(entry: Entry):
@@ -72,34 +76,33 @@ def submit_tracklog(task_id: int):
         file.save(path)
         state, entry = _process_flight(task, path)
         message = ''
-
-        # TODO: this shouldn't be a flash. Need better formatting, pass the entry to the detail page for proper display
         if state == 'new':
-            message = f'New Entry Created!<br><br>'
+            message = f'New Entry Created!'
         elif state == 'updated':
-            message = f'Replaced your previous entry with this better one!<br><br>'
+            message = f'Updated your previous entry!'
         elif state == 'ignored':
-            message = f'Your previous entry was better!<br><br>'
+            message = f'Your previous entry was better!'
 
-        message += '<div class="container"><div class="row justify-content-center">'
-        message += '<div class="col text-end">Your entry:<br>' \
-                   f'pilot:<br>' \
-                   f'SSS:<br>' \
-                   f'ESS:<br>' \
-                   f'total time:<br>' \
-                   f'status:</div>'
-        message += '<div class="col text-start"><br>' \
-                   f'{entry.name}<br>' \
-                   f'{entry.start or "-"}<br>' \
-                   f'{entry.end or "-"}<br>' \
-                   f'{entry.elapsed() or "-"}<br>' \
-                   f'{entry.status}</div>'
-        message += '</div></div>'
+        # message += '<div class="container"><div class="row justify-content-center">'
+        # message += '<div class="col text-end">Your entry:<br>' \
+        #            f'pilot:<br>' \
+        #            f'SSS:<br>' \
+        #            f'ESS:<br>' \
+        #            f'total time:<br>' \
+        #            f'status:</div>'
+        # message += '<div class="col text-start"><br>' \
+        #            f'{entry.name}<br>' \
+        #            f'{entry.start or "-"}<br>' \
+        #            f'{entry.end or "-"}<br>' \
+        #            f'{entry.elapsed() or "-"}<br>' \
+        #            f'{entry.status}</div>'
+        # message += '</div></div>'
 
         flash(message, category='info')
         os.remove(path)
 
-        return redirect(url_for('tasks.detail', task_id=task_id))
+        logger.info(f"redirecting with entry_id: {entry.id}")
+        return redirect(url_for('tasks.detail', task_id=task_id, entry_id=entry.id))
 
 
 def _allowed_file(filename):
@@ -111,7 +114,6 @@ def _process_flight(task: Task, path: str) -> Tuple[str, Entry]:
     flight = _parse_trackfile(path)
     new_entry = _flight_to_entry(task, flight)
     existing = db.session.query(Entry).filter_by(task_id=task.id, name=new_entry.name).first()
-    # db.session.execute(Entry.upsert(entry))
 
     state = None
     if existing:
@@ -134,6 +136,7 @@ def _process_flight(task: Task, path: str) -> Tuple[str, Entry]:
         entry = new_entry
     db.session.commit()
 
+    logger.info(f"entry_id: {entry.id}")
     return state, entry
 
 

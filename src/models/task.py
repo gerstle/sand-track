@@ -5,8 +5,6 @@ from sqlalchemy import DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src import db
-from src.models.entry import Entry
-from src.models.turnpoint import Turnpoint
 
 
 class Task(db.Model):

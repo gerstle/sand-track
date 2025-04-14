@@ -10,7 +10,6 @@ from sqlalchemy.sql import and_, or_
 from sqlalchemy.sql import func
 
 from src import db
-from src.models.task import Task
 
 logger = logging.getLogger(__name__)
 

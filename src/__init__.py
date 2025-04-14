@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+logging.getLogger('src.tasks').setLevel(logging.INFO)
 
 db = SQLAlchemy()
 login_manager = LoginManager()
