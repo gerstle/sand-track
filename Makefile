@@ -18,3 +18,13 @@ test:
 	source .venv/bin/activate; \
 	python -m unittest discover; \
 	deactivate
+
+docker-up:
+	mkdir ${HOME}/tmp/database \
+	; mkdir ${HOME}/tmp/upload \
+	; COMPOSE_BAKE=true docker compose up --build
+
+docker-clean:
+	docker compose down -v \
+	  && rm -rf ${HOME}/tmp/database \
+	  && rm -rf ${HOME}/tmp/upload
