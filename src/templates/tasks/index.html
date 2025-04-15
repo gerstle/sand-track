@@ -19,6 +19,7 @@
         <th scope="row">{{ t.name }}</th>
         <td>{{ t.start.strftime("%Y-%m-%d %H:%M:%S %z") }}</td>
         <td>{{ t.end.strftime("%Y-%m-%d %H:%M:%S %z") }}</td>
+        {# TODO: add current leader#}
         <td>-</td>
     </tr>
     {% endfor %}
