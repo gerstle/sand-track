@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ux
+set -ue
 
 if [ -z "${DATABASE_PATH:-}" ]; then
     echo "DATABASE_PATH is not set. Exiting..."
