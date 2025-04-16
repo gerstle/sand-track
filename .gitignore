@@ -16,3 +16,5 @@ instance
 
 .env
 secret_key.txt
+
+.DS_Store
