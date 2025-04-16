@@ -110,6 +110,7 @@
                             <th class="text-start">name</th>
                             <th class="text-start d-none d-lg-block">start</th>
                             <th class="text-start">time</th>
+                            <th class="text-start">status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -119,6 +120,7 @@
                                 <td class="text-start">{{ e.name }}</td>
                                 <td class="text-start d-none d-lg-block">{{ e.start or '-' }}</td>
                                 <td class="text-start">{{ e.elapsed() or '-' }}</td>
+                                <td class="text-start">{{ e.status }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
