@@ -1,5 +1,4 @@
 import datetime
-import logging
 import sys
 from typing import Optional
 
@@ -10,8 +9,6 @@ from sqlalchemy.sql import and_, or_
 from sqlalchemy.sql import func
 
 from src import db
-
-logger = logging.getLogger(__name__)
 
 
 def remove_key(d, key):

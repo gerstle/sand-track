@@ -1,23 +1,20 @@
-import logging
-import os
 import datetime
+import os
 import sys
 from enum import Enum
+from typing import Tuple
 from zoneinfo import ZoneInfo
-from geopy import distance
 
 from flask import Blueprint, request, render_template, flash, redirect, url_for, current_app
+from geopy import distance
 from sqlalchemy import or_
 from werkzeug.utils import secure_filename
 
 from src import db
 from src.models.entry import Entry
 from src.models.task import Task
-from typing import Tuple
-
 from src.models.turnpoint import Turnpoint
 
-logger = logging.getLogger(__name__)
 ALLOWED_EXTENSIONS = {'igc'}
 
 tasks_bp = Blueprint('tasks', __name__, url_prefix='/tasks')
@@ -57,52 +54,41 @@ def submit_tracklog(task_id: int):
     task = db.session.query(Task).get(task_id)
 
     if not task:
-        flash('Invalid task!', category='error')
+        flash('Invalid task!', category='danger')
         return redirect(url_for('tasks.detail', task_id=task_id))
 
     if 'tracklogFile' not in request.files:
-        flash('No file part', category='error')
+        flash('No file part', category='danger')
         return redirect(url_for('tasks.detail', task_id=task_id))
     file = request.files['tracklogFile']
     # If the user does not select a file, the browser submits an
     # empty file without a filename.
     if file.filename == '':
-        flash('No selected file', category='error')
+        flash('No selected file', category='danger')
         return redirect(url_for('tasks.detail', task_id=task_id))
     if file and _allowed_file(file.filename):
         filename = secure_filename(file.filename)
 
         path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
         file.save(path)
-        state, entry = _process_flight(task, path)
-        message = ''
-        if state == 'new':
-            message = f'New Entry Created!'
-        elif state == 'updated':
-            message = f'Updated your previous entry!'
-        elif state == 'ignored':
-            message = f'Your previous entry was better!'
+        try:
+            state, entry = _process_flight(task, path)
+            message = ''
+            if state == 'new':
+                message = f'New Entry Created!'
+            elif state == 'updated':
+                message = f'Updated your previous entry!'
+            elif state == 'ignored':
+                message = f'Your previous entry was better!'
 
-        # message += '<div class="container"><div class="row justify-content-center">'
-        # message += '<div class="col text-end">Your entry:<br>' \
-        #            f'pilot:<br>' \
-        #            f'SSS:<br>' \
-        #            f'ESS:<br>' \
-        #            f'total time:<br>' \
-        #            f'status:</div>'
-        # message += '<div class="col text-start"><br>' \
-        #            f'{entry.name}<br>' \
-        #            f'{entry.start or "-"}<br>' \
-        #            f'{entry.end or "-"}<br>' \
-        #            f'{entry.elapsed() or "-"}<br>' \
-        #            f'{entry.status}</div>'
-        # message += '</div></div>'
+            flash(message, category='info')
+            os.remove(path)
 
-        flash(message, category='info')
-        os.remove(path)
-
-        logger.info(f"redirecting with entry_id: {entry.id}")
-        return redirect(url_for('tasks.detail', task_id=task_id, entry_id=entry.id))
+            current_app.logger.info(f"redirecting with entry_id: {entry.id}")
+            return redirect(url_for('tasks.detail', task_id=task_id, entry_id=entry.id))
+        except ValueError as e:
+            flash(str(e), category='danger')
+            return redirect(url_for('tasks.detail', task_id=task_id))
 
 
 def _allowed_file(filename):
@@ -112,6 +98,18 @@ def _allowed_file(filename):
 
 def _process_flight(task: Task, path: str) -> Tuple[str, Entry]:
     flight = _parse_trackfile(path)
+    start_time = datetime.datetime(
+        flight['year'], flight['month'], flight['day'],
+        flight['breadcrumbs'][0]['hour'], flight['breadcrumbs'][0]['minute'], flight['breadcrumbs'][0]['second']
+    )
+
+    current_app.logger.info(f"flight start: {start_time} task: {task.start} --> {task.end}")
+    if task.start <= start_time <= task.end:
+        current_app.logger.info("flight within task window")
+    else:
+        current_app.logger.info("flight outside task window")
+        raise ValueError('Flight outside of task window')
+
     new_entry = _flight_to_entry(task, flight)
     existing = db.session.query(Entry).filter_by(task_id=task.id, name=new_entry.name).first()
 
@@ -119,7 +117,7 @@ def _process_flight(task: Task, path: str) -> Tuple[str, Entry]:
     if existing:
         if existing.time_seconds is None or (new_entry.time_seconds and existing.time_seconds > new_entry.time_seconds):
             state = "updated"
-            logger.info("updating existing entry")
+            current_app.logger.info("updating existing entry")
             existing.submitted = datetime.datetime.now()
             existing.start = new_entry.start
             existing.end = new_entry.end
@@ -127,16 +125,16 @@ def _process_flight(task: Task, path: str) -> Tuple[str, Entry]:
             existing.status = new_entry.status
         else:
             state = "ignored"
-            logger.info("existing entry is better")
+            current_app.logger.info("existing entry is better")
         entry = existing
     else:
         state = "new"
-        logger.info("creating new entry")
+        current_app.logger.info("creating new entry")
         db.session.add(new_entry)
         entry = new_entry
     db.session.commit()
 
-    logger.info(f"entry_id: {entry.id}")
+    current_app.logger.info(f"entry_id: {entry.id}")
     return state, entry
 
 
@@ -264,14 +262,14 @@ def _flight_to_entry(task: Task, flight: dict[str, list[dict[str, int | float]] 
     if state == STATE.GOAL:
         status = 'goal'
         time = (end_time - start_time).total_seconds()
-    logger.debug(f'final status: {status} time: {time}')
+    current_app.logger.debug(f'final status: {status} time: {time}')
 
     return Entry(task_id=task.id, name=flight['pilot'], start=start_time, end=end_time, time_seconds=time,
                  status=status)
 
 
 def _log_flight_event(breadcrumb_index: int, turnpoint_index: int, turnpoint: Turnpoint, message: str) -> None:
-    logger.debug(
+    current_app.logger.debug(
         f'[{breadcrumb_index}] turnpoint {turnpoint_index + 1}: {turnpoint.waypoint.name} {turnpoint.tag or ""} - {message}')
 
 

@@ -7,10 +7,8 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-logging.basicConfig()
-logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
-logging.getLogger("src.tasks").setLevel(logging.INFO)
-logging.getLogger("src.config").setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO)
+logging.getLogger("sqlalchemy.engine").setLevel(logging.WARN)
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -35,7 +33,7 @@ def create_app():
         }
     })
     app = Flask(__name__)
-
+    app.logger.setLevel(logging.INFO)
     app.config.from_pyfile("config.py")
 
     db.init_app(app)
