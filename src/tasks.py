@@ -70,6 +70,7 @@ def submit_tracklog(task_id: int):
         filename = secure_filename(file.filename)
 
         path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        current_app.logger.info("file upload path: {path}")
         file.save(path)
         try:
             state, entry = _process_flight(task, path)
