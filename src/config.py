@@ -19,4 +19,4 @@ SECRET_KEY = secret_key(environ.get("SECRET_KEY_FILE")) or environ.get("SECRET_K
 SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(environ.get("DATABASE_PATH") or "sand-track.sqlite")
 
 logger.info(f"Using DB {SQLALCHEMY_DATABASE_URI}")
-UPLOAD_FOLDER = "/tmp"
+UPLOAD_FOLDER = environ.get("UPLOAD_FOLDER") or "/tmp"

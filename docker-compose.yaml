@@ -5,10 +5,12 @@ services:
       - "3000:3000"
     volumes:
       - db_data:/data/
-      - upload_data:/tmp/uploads
+      - upload_data:/tmp/
     environment:
       DATABASE_PATH: /data/db/sand-track.sqlite
+      UPLOAD_FOLDER: /tmp/uploads
       GUNICORN_PORT: 3000
+      GUNICORN_HOST: 0.0.0.0
       SECRET_KEY_FILE: /run/secrets/secret_key
     secrets:
       - secret_key

@@ -3,12 +3,17 @@
 set -ux
 
 if [ -z "${DATABASE_PATH:-}" ]; then
-    echo "DATABSE_PATH is not set. Exiting..."
+    echo "DATABASE_PATH is not set. Exiting..."
+    exit 1
+fi
+
+if [ -z "${GUNICORN_HOST:-}" ]; then
+    echo "GUNICORN_HOST is not set. Exiting..."
     exit 1
 fi
 
 if [ -z "${GUNICORN_PORT:-}" ]; then
-    echo "DATABSE_PATH is not set. Exiting..."
+    echo "GUNICORN_PORT is not set. Exiting..."
     exit 1
 fi
 
@@ -21,4 +26,4 @@ fi
 echo "running migrations..."
 .venv/bin/flask --app src db upgrade -d src/migrations
 echo "starting..."
-.venv/bin/gunicorn -b "0.0.0.0:${GUNICORN_PORT}" wsgi:app
+.venv/bin/gunicorn -b "${GUNICORN_HOST}:${GUNICORN_PORT}" wsgi:app
