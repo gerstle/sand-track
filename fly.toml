@@ -23,7 +23,7 @@ primary_region = 'lax'
   memory_mb = 512
 
 [env]
-  GUNICORN_HOST = '127.0.0.1'
+  GUNICORN_HOST = '0.0.0.0'
   GUNICORN_PORT = 3000
   DATABASE_PATH = '/data/db/sand-track.sqlite'
   UPLOAD_FOLDER = '/data/upload'
