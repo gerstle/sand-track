@@ -4,28 +4,21 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - db_data:/data/
-      - upload_data:/tmp/
+      - data:/data/
     environment:
       DATABASE_PATH: /data/db/sand-track.sqlite
-      UPLOAD_FOLDER: /tmp/uploads
+      UPLOAD_FOLDER: /data/upload
       GUNICORN_PORT: 3000
       GUNICORN_HOST: 0.0.0.0
       SECRET_KEY_FILE: /run/secrets/secret_key
     secrets:
       - secret_key
 volumes:
-  db_data:
+  data:
     driver: local
     driver_opts:
       type: none
-      device: ${HOME}/tmp/database/
-      o: bind
-  upload_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${HOME}/tmp/upload/
+      device: ${HOME}/tmp/
       o: bind
 secrets:
   secret_key:

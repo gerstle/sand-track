@@ -21,9 +21,9 @@ RUN groupadd -g 1000 nonroot
 RUN useradd -g 1000 -u 1000 nonroot
 
 RUN mkdir /data
-RUN mkdir /tmp/uploads
+RUN mkdir /data/upload
 RUN chown nonroot:nonroot /data
-RUN chown nonroot:nonroot /tmp/uploads
+RUN chown nonroot:nonroot /data/upload
 
 
 COPY --from=builder --chown=nonroot:nonroot /app/.venv /app/.venv
