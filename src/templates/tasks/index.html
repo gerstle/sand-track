@@ -1,38 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title">
-    Current tasks
-</h1>
-<table class="table table-hover table-striped">
-    <thead class="table-dark">
-    <tr>
-        <th scope="col">name</th>
-        <th scope="col">start</th>
-        <th scope="col">end</th>
-        <th scope="col">current leader</th>
-    </tr>
-    </thead>
-    <tbody>
+    <h1 class="title">
+        Current tasks
+    </h1>
     {% for t in tasks %}
-    <tr class="position-relative clickable-row" data-href={{url_for('tasks.detail', task_id=t.id)}}>
-        <th scope="row">{{ t.name }}</th>
-        <td>{{ t.start.strftime("%Y-%m-%d %H:%M:%S %z") }}</td>
-        <td>{{ t.end.strftime("%Y-%m-%d %H:%M:%S %z") }}</td>
-        {# TODO: add current leader#}
-        <td>-</td>
-    </tr>
+        <div class="card m-2">
+            <div class="card-header text-start">
+                <div class="row">
+                    <div class="col">
+                        {{ t.name }}
+                    </div>
+                    <div class="col text-end">
+                        {{ t.start.strftime("%Y-%m-%d") }} &rarr; {{ t.end.strftime("%Y-%m-%d") }}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body text-start">
+                <h5 class="card-title">{{ t.description or t.name }}</h5>
+                <p class="card-text">
+                </p>
+                <p class="card-text">
+                    {# TODO: add current leader#}
+                    Current leader: {{ "-" }}
+                </p>
+                <div class="text-end">
+                    <a href=" {{ url_for('tasks.detail', task_id=t.id) }}" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+        </div>
     {% endfor %}
-    </tbody>
-</table>
-{% endblock %}
-
-{% block scripts %} {{ super() }}
-<script>
-    jQuery(document).ready(function($) {
-        $(".clickable-row").click(function() {
-            window.location = $(this).data("href");
-        });
-    });
-</script>
 {% endblock %}

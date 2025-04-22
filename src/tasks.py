@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 
 from flask import Blueprint, request, render_template, flash, redirect, url_for, current_app
 from geopy import distance
-from sqlalchemy import or_
+from sqlalchemy import or_, text
 from werkzeug.utils import secure_filename
 
 from src import db
@@ -39,7 +39,26 @@ def detail(task_id: int):
     if entry_id:
         entry = db.session.query(Entry).get(entry_id)
 
-    return render_template('tasks/detail.html', task=task, entry=entry)
+    ab_entries=db.session.query(Entry).from_statement(text(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='EN-A' OR glider_class='EN-B')")).all()
+    ab_entries.sort(key=_sort_entries)
+
+    ab_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='EN-A' OR glider_class='EN-B')")
+    c_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND glider_class='EN-C'")
+    hot_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='EN-D' OR glider_class='EN-CCC')")
+    special_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='Mini' OR glider_class='Parakite')")
+
+    return render_template('tasks/detail.html', task=task, entry=entry, category_entries=[
+        {"id": "ab", "name": "EN-A / EN-B", "entries": ab_entries},
+        {"id": "c", "name": "EN-C", "entries": c_entries},
+        {"id": "dccc", "name": "EN-D / EN-CCC", "entries": hot_entries},
+        {"id": "cool", "name": "Cool Kids", "entries": special_entries}
+    ])
+
+
+def _get_entries(query: str) -> list[Entry]:
+    entries = db.session.query(Entry).from_statement(text(query)).all()
+    entries.sort(key=_sort_entries)
+    return entries
 
 
 def _sort_entries(entry: Entry):
@@ -64,7 +83,7 @@ def submit_tracklog(task_id: int):
     # If the user does not select a file, the browser submits an
     # empty file without a filename.
     if file.filename == '':
-        flash('No selected file', category='danger')
+        flash('No file selected', category='danger')
         return redirect(url_for('tasks.detail', task_id=task_id))
     if file and _allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -73,7 +92,14 @@ def submit_tracklog(task_id: int):
         current_app.logger.info("file upload path: {path}")
         file.save(path)
         try:
-            state, entry = _process_flight(task, path)
+            state, entry = _process_flight(
+                task,
+                path=path,
+                name=request.form['name'],
+                license=request.form['license'],
+                glider=request.form['glider'],
+                glider_class=request.form['gliderClass'],
+            )
             message = ''
             if state == 'new':
                 message = f'New Entry Created!'
@@ -90,6 +116,7 @@ def submit_tracklog(task_id: int):
         except ValueError as e:
             flash(str(e), category='danger')
             return redirect(url_for('tasks.detail', task_id=task_id))
+    return None
 
 
 def _allowed_file(filename):
@@ -97,7 +124,14 @@ def _allowed_file(filename):
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def _process_flight(task: Task, path: str) -> Tuple[str, Entry]:
+def _process_flight(
+        task: Task,
+        name: str,
+        license: str,
+        glider: str,
+        glider_class: str,
+        path: str,
+) -> Tuple[str, Entry]:
     flight = _parse_trackfile(path)
     start_time = datetime.datetime(
         flight['year'], flight['month'], flight['day'],
@@ -112,7 +146,15 @@ def _process_flight(task: Task, path: str) -> Tuple[str, Entry]:
         raise ValueError('Flight outside of task window')
 
     new_entry = _flight_to_entry(task, flight)
-    existing = db.session.query(Entry).filter_by(task_id=task.id, name=new_entry.name).first()
+    new_entry.name = name
+    new_entry.license = license
+    new_entry.glider = glider
+    new_entry.glider_class = glider_class
+    existing = db.session.query(Entry).filter_by(
+        task_id=task.id,
+        name=new_entry.name,
+        glider_class=new_entry.glider_class
+    ).first()
 
     state = None
     if existing:

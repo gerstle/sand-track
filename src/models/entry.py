@@ -16,13 +16,15 @@ def remove_key(d, key):
 
 
 class Entry(db.Model):
-    __table_args__ = (db.UniqueConstraint('name', 'task_id'),)
+    __table_args__ = (db.UniqueConstraint('task_id', 'name', 'glider_class'),)
     id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.id'))
     task: Mapped["Task"] = relationship(back_populates="entries")
     name: Mapped[str]
-    submitted: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), default=func.now(),
-                                                         onupdate=func.now())
+    license: Mapped[Optional[str]]
+    glider: Mapped[Optional[str]]
+    glider_class: Mapped[str]
+    submitted: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
     start: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime(timezone=True))
     end: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime(timezone=True))
     status: Mapped[str]

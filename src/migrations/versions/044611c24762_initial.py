@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: c9aab70d07b2
+Revision ID: 044611c24762
 Revises: 
-Create Date: 2025-04-14 19:57:28.238818
+Create Date: 2025-04-21 22:18:25.686897
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c9aab70d07b2'
+revision = '044611c24762'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -44,6 +44,9 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('task_id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
+    sa.Column('license', sa.String(), nullable=True),
+    sa.Column('glider', sa.String(), nullable=True),
+    sa.Column('glider_class', sa.String(), nullable=False),
     sa.Column('submitted', sa.DateTime(timezone=True), nullable=False),
     sa.Column('start', sa.DateTime(timezone=True), nullable=True),
     sa.Column('end', sa.DateTime(timezone=True), nullable=True),
@@ -51,7 +54,7 @@ def upgrade():
     sa.Column('time_seconds', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['task_id'], ['task.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name', 'task_id')
+    sa.UniqueConstraint('task_id', 'name', 'glider_class')
     )
     op.create_table('waypoint',
     sa.Column('id', sa.Integer(), nullable=False),
