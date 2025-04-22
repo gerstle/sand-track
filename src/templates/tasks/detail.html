@@ -14,26 +14,30 @@
                 </div>
                 <div class="row mt-3 collapse multi-collapse show" id="entry">
                     <div class="col">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="text-start">pilot</th>
-                                <th class="text-start">SSS</th>
-                                <th class="text-start">ESS</th>
-                                <th class="text-start">total time</th>
-                                <th class="text-start">status</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="text-start">{{ entry.name }}</td>
-                                <td class="text-start">{{ entry.start or "-" }}</td>
-                                <td class="text-start">{{ entry.end or "-" }}</td>
-                                <td class="text-start">{{ entry.elapsed() }}</td>
-                                <td class="text-start">{{ entry.status }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <div class="table-responsive-xl">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-start">pilot</th>
+                                        <th class="text-start">SSS</th>
+                                        <th class="text-start">ESS</th>
+                                        <th class="text-start">total time</th>
+                                        <th class="text-start">status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="text-start">{{ entry.name }}</td>
+                                        <td class="text-start">{{ entry.start or "-" }}</td>
+                                        <td class="text-start">{{ entry.end or "-" }}</td>
+                                        <td class="text-start">{{ entry.elapsed() }}</td>
+                                        <td class="text-start">{{ entry.status }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,24 +73,26 @@
             </div>
             <div class="row mt-3 collapse multi-collapse show" id="turnpoints">
                 <div class="col">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th class="text-start"></th>
-                            <th class="text-start">name</th>
-                            <th class="text-start">radius (meters)</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for tp in task.turnpoints %}
+                    <div class="table-responsive-xl">
+                        <table class="table table-hover table-striped">
+                            <thead>
                             <tr>
-                                <td class="text-start">{{ tp.tag or "" }}</td>
-                                <td class="text-start">{{ tp.waypoint.name }}</td>
-                                <td class="text-start">{{ tp.radius }}</td>
+                                <th class="text-start"></th>
+                                <th class="text-start">name</th>
+                                <th class="text-start">radius (meters)</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            {% for tp in task.turnpoints %}
+                                <tr>
+                                    <td class="text-start">{{ tp.tag or "" }}</td>
+                                    <td class="text-start">{{ tp.waypoint.name }}</td>
+                                    <td class="text-start">{{ tp.radius }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -104,32 +110,34 @@
             </div>
             <div class="row mt-3 collapse multi-collapse show" id="overall-results">
                 <div class="col">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th class="text-start">place</th>
-                            <th class="text-start">name</th>
-                            <th class="text-start">glider</th>
-                            <th class="text-start">glider class</th>
-                            <th class="text-start d-none d-lg-block">start</th>
-                            <th class="text-start">time</th>
-                            <th class="text-start">status</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for e in task.entries %}
+                    <div class="table-responsive-xl">
+                        <table class="table table-hover table-striped">
+                            <thead>
                             <tr>
-                                <td class="text-start">{{ loop.index0 + 1 }}</td>
-                                <td class="text-start">{{ e.name }}</td>
-                                <td class="text-start">{{ e.glider }}</td>
-                                <td class="text-start">{{ e.glider_class }}</td>
-                                <td class="text-start d-none d-lg-block">{{ e.start or '-' }}</td>
-                                <td class="text-start">{{ e.elapsed() or '-' }}</td>
-                                <td class="text-start">{{ e.status }}</td>
+                                <th class="text-start"></th>
+                                <th class="text-start">name</th>
+                                <th class="text-start">glider</th>
+                                <th class="text-start">class</th>
+                                <th class="text-start d-none d-lg-block">start</th>
+                                <th class="text-start">time</th>
+                                <th class="text-start">status</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            {% for e in task.entries %}
+                                <tr>
+                                    <td class="text-start">{{ loop.index0 + 1 }}</td>
+                                    <td class="text-start">{{ e.name }}</td>
+                                    <td class="text-start">{{ e.glider }}</td>
+                                    <td class="text-start">{{ e.glider_class }}</td>
+                                    <td class="text-start d-none d-lg-block">{{ e.start or '-' }}</td>
+                                    <td class="text-start">{{ e.elapsed() or '-' }}</td>
+                                    <td class="text-start">{{ e.status }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -150,32 +158,34 @@
                     </div>
                     <div class="row mt-3 collapse multi-collapse show" id="{{ category.id }}-results">
                         <div class="col">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th class="text-start">place</th>
-                                    <th class="text-start">name</th>
-                                    <th class="text-start">glider</th>
-                                    <th class="text-start">glider class</th>
-                                    <th class="text-start d-none d-lg-block">start</th>
-                                    <th class="text-start">time</th>
-                                    <th class="text-start">status</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for e in category.entries %}
+                            <div class="table-responsive-xl">
+                                <table class="table table-hover table-striped">
+                                    <thead>
                                     <tr>
-                                        <td class="text-start">{{ loop.index0 + 1 }}</td>
-                                        <td class="text-start">{{ e.name }}</td>
-                                        <td class="text-start">{{ e.glider }}</td>
-                                        <td class="text-start">{{ e.glider_class }}</td>
-                                        <td class="text-start d-none d-lg-block">{{ e.start or '-' }}</td>
-                                        <td class="text-start">{{ e.elapsed() or '-' }}</td>
-                                        <td class="text-start">{{ e.status }}</td>
+                                        <th class="text-start"></th>
+                                        <th class="text-start">name</th>
+                                        <th class="text-start">glider</th>
+                                        <th class="text-start">class</th>
+                                        <th class="text-start d-none d-lg-block">start</th>
+                                        <th class="text-start">time</th>
+                                        <th class="text-start">status</th>
                                     </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    {% for e in category.entries %}
+                                        <tr>
+                                            <td class="text-start">{{ loop.index0 + 1 }}</td>
+                                            <td class="text-start">{{ e.name }}</td>
+                                            <td class="text-start">{{ e.glider }}</td>
+                                            <td class="text-start">{{ e.glider_class }}</td>
+                                            <td class="text-start d-none d-lg-block">{{ e.start or '-' }}</td>
+                                            <td class="text-start">{{ e.elapsed() or '-' }}</td>
+                                            <td class="text-start">{{ e.status }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -215,7 +225,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="gliderClass" class="form-label">Glider Class</label>
+                            <label for="gliderClass" class="form-label">Class</label>
                             <select name="gliderClass" id="gliderClass" class="form-select">
                                 <option value="EN-A">EN-A</option>
                                 <option value="EN-B">EN-B</option>
