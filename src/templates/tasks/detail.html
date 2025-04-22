@@ -1,6 +1,45 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if entry %}
+        <div class="row rounded border bg-light p-2 m-2">
+            <div class="col">
+                <div class="row text-start">
+                    <div class="col">
+                        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#entry"
+                                aria-expanded="false" aria-controls="entry">your entry
+                        </button>
+                    </div>
+                </div>
+                <div class="row mt-3 collapse multi-collapse show" id="entry">
+                    <div class="col">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="text-start">pilot</th>
+                                <th class="text-start">SSS</th>
+                                <th class="text-start">ESS</th>
+                                <th class="text-start">total time</th>
+                                <th class="text-start">status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="text-start">{{ entry.name }}</td>
+                                <td class="text-start">{{ entry.start or "-" }}</td>
+                                <td class="text-start">{{ entry.end or "-" }}</td>
+                                <td class="text-start">{{ entry.elapsed() }}</td>
+                                <td class="text-start">{{ entry.status }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="clearfix">
         <div class="float-start">
             <h1>Task: {{ task.name }}</h1>
@@ -11,6 +50,7 @@
             <h2>{{ task.description or "" }}</h2>
         </div>
     </div>
+
     <p class="text-start">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitTracklogModal">
             submit your tracklog
@@ -52,62 +92,25 @@
         </div>
     </div>
 
-    {% if entry %}
-        <div class="row rounded border bg-light p-2 m-2">
-            <div class="col">
-                <div class="row text-start">
-                    <div class="col">
-                        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#entry"
-                                aria-expanded="false" aria-controls="entry">your entry
-                        </button>
-                    </div>
-                </div>
-                <div class="row mt-3 collapse multi-collapse show" id="entry">
-                    <div class="col">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="text-start">pilot</th>
-                                <th class="text-start">SSS</th>
-                                <th class="text-start">ESS</th>
-                                <th class="text-start">total time</th>
-                                <th class="text-start">status</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="text-start">{{ entry.name }}</td>
-                                <td class="text-start">{{ entry.start or "-" }}</td>
-                                <td class="text-start">{{ entry.end or "-" }}</td>
-                                <td class="text-start">{{ entry.elapsed() }}</td>
-                                <td class="text-start">{{ entry.status }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-
     <div class="row rounded border bg-light p-2 m-2">
         <div class="col">
             <div class="row text-start">
                 <div class="col">
                     <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#results"
-                            aria-expanded="false" aria-controls="results">results
+                            data-bs-target="#overall-results"
+                            aria-expanded="false" aria-controls="overall-results">Overall Results
                     </button>
                 </div>
             </div>
-            <div class="row mt-3 collapse multi-collapse show" id="results">
+            <div class="row mt-3 collapse multi-collapse show" id="overall-results">
                 <div class="col">
                     <table class="table table-hover">
                         <thead>
                         <tr>
                             <th class="text-start">place</th>
                             <th class="text-start">name</th>
+                            <th class="text-start">glider</th>
+                            <th class="text-start">glider class</th>
                             <th class="text-start d-none d-lg-block">start</th>
                             <th class="text-start">time</th>
                             <th class="text-start">status</th>
@@ -118,6 +121,8 @@
                             <tr>
                                 <td class="text-start">{{ loop.index0 + 1 }}</td>
                                 <td class="text-start">{{ e.name }}</td>
+                                <td class="text-start">{{ e.glider }}</td>
+                                <td class="text-start">{{ e.glider_class }}</td>
                                 <td class="text-start d-none d-lg-block">{{ e.start or '-' }}</td>
                                 <td class="text-start">{{ e.elapsed() or '-' }}</td>
                                 <td class="text-start">{{ e.status }}</td>
@@ -130,6 +135,54 @@
         </div>
     </div>
 
+    {% for category in category_entries %}
+        {% if category.entries | length > 0 %}
+            <div class="row rounded border bg-light p-2 m-2">
+                <div class="col">
+                    <div class="row text-start">
+                        <div class="col">
+                            <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#{{ category.id }}-results"
+                                    aria-expanded="false" aria-controls="{{ category.id }}-results">
+                                {{ category.name }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row mt-3 collapse multi-collapse show" id="{{ category.id }}-results">
+                        <div class="col">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="text-start">place</th>
+                                    <th class="text-start">name</th>
+                                    <th class="text-start">glider</th>
+                                    <th class="text-start">glider class</th>
+                                    <th class="text-start d-none d-lg-block">start</th>
+                                    <th class="text-start">time</th>
+                                    <th class="text-start">status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for e in category.entries %}
+                                    <tr>
+                                        <td class="text-start">{{ loop.index0 + 1 }}</td>
+                                        <td class="text-start">{{ e.name }}</td>
+                                        <td class="text-start">{{ e.glider }}</td>
+                                        <td class="text-start">{{ e.glider_class }}</td>
+                                        <td class="text-start d-none d-lg-block">{{ e.start or '-' }}</td>
+                                        <td class="text-start">{{ e.elapsed() or '-' }}</td>
+                                        <td class="text-start">{{ e.status }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
     <div class="modal" tabindex="-1" id="submitTracklogModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -141,8 +194,45 @@
                     </div>
                     <div class="modal-body text-start">
                         <div class="mb-3">
-                            <label for="tracklogFile" class="form-label">igc tracklog file</label>
+                            <label for="name" class="form-label">Pilot Name</label>
+                            <input class="form-control" type="text" id="name" name="name">
+                            <div class="form-text">
+                                Full name. Until we get logins setup, please try to use a consistent name
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="license" class="form-label">Pilot License</label>
+                            <input class="form-control" type="text" id="license" name="license">
+                            <div class="form-text">
+                                USHPA / HPAC / IPPI Number
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="glider" class="form-label">Glider</label>
+                            <input class="form-control" type="text" id="glider" name="glider">
+                            <div class="form-text">
+                                Glider make and model. Eg. 'Ozone Delta4'
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gliderClass" class="form-label">Glider Class</label>
+                            <select name="gliderClass" id="gliderClass" class="form-select">
+                                <option value="EN-A">EN-A</option>
+                                <option value="EN-B">EN-B</option>
+                                <option value="EN-C">EN-C</option>
+                                <option value="EN-D">EN-D</option>
+                                <option value="EN-CCC">EN-CCC</option>
+                                <option value="Mini">Mini</option>
+                                <option value="Parakite">Parakite</option>
+
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tracklogFile" class="form-label">Tracklog File</label>
                             <input class="form-control" type="file" id="tracklogFile" name="tracklogFile">
+                            <div class="form-text">
+                                Only IGC tracklogs are supported.
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -213,6 +213,7 @@ def _find_waypoint(waypoints: List[Waypoint], name: str) -> Waypoint | None:
 
     return None
 
+
 def _real_turnpoints(task: Task, waypoints: List[Waypoint]) -> List[Turnpoint]:
     rv = []
     task_points = [
@@ -278,7 +279,18 @@ def _entries(tasks: List[Task]) -> List[Entry]:
         for index in range(random.randint(3, 8)):
             start = fake.date_between_dates(date_start=task.start, date_end=task.end)
             end = fake.date_between_dates(date_start=start, date_end=task.end)
-            rv.append(Entry(task_id=task.id, name=fake.name(), start=start, end=end,
-                            time_seconds=(end - start).total_seconds(), status=random.choice(["goal", "missed goal"])))
+            rv.append(
+                Entry(
+                    task_id=task.id,
+                    name=fake.name(),
+                    license=fake.port_number(),
+                    glider=fake.company(),
+                    glider_class=random.choice(["EN-A", "EN-B", "EN-C", "EN-D", "EN-CCC", "Mini", "Parakite"]),
+                    start=start,
+                    end=end,
+                    time_seconds=(end - start).total_seconds(),
+                    status=random.choice(["goal", "missed goal"])
+                )
+            )
 
     return rv
