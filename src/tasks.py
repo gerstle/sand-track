@@ -32,6 +32,9 @@ def index():
 @tasks_bp.route('/<int:task_id>')
 def detail(task_id: int):
     task = db.session.query(Task).get(task_id)
+    if task is None:
+        return index()
+
     task.entries.sort(key=_sort_entries)
 
     entry = None
