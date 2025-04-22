@@ -23,7 +23,7 @@ def seed_db():
     waypoints = _waypoints(groups)
     _add(waypoints)
 
-    if False:
+    if True:
         tasks = _real_tasks()
         _add(tasks)
         _add(_real_turnpoints(tasks[0], waypoints))
