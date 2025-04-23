@@ -98,51 +98,6 @@
         </div>
     </div>
 
-    <div class="row rounded border bg-light p-2 m-2">
-        <div class="col">
-            <div class="row text-start">
-                <div class="col">
-                    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#overall-results"
-                            aria-expanded="false" aria-controls="overall-results">Overall Results
-                    </button>
-                </div>
-            </div>
-            <div class="row mt-3 collapse multi-collapse show" id="overall-results">
-                <div class="col">
-                    <div class="table-responsive-xl">
-                        <table class="table table-hover table-striped">
-                            <thead>
-                            <tr>
-                                <th class="text-start"></th>
-                                <th class="text-start">name</th>
-                                <th class="text-start">glider</th>
-                                <th class="text-start">class</th>
-                                <th class="text-start d-none d-lg-block">start</th>
-                                <th class="text-start">time</th>
-                                <th class="text-start">status</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for e in task.entries %}
-                                <tr>
-                                    <td class="text-start">{{ loop.index0 + 1 }}</td>
-                                    <td class="text-start">{{ e.name }}</td>
-                                    <td class="text-start">{{ e.glider }}</td>
-                                    <td class="text-start">{{ e.glider_class }}</td>
-                                    <td class="text-start d-none d-lg-block">{{ e.start or '-' }}</td>
-                                    <td class="text-start">{{ e.elapsed() or '-' }}</td>
-                                    <td class="text-start">{{ e.status }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     {% for category in category_entries %}
         {% if category.entries | length > 0 %}
             <div class="row rounded border bg-light p-2 m-2">
@@ -196,8 +151,7 @@
     <div class="modal" tabindex="-1" id="submitTracklogModal">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method=post enctype=multipart/form-data
-                      action="{{ url_for('tasks.submit_tracklog', task_id=task.id) }}">
+                <form class="needs-validation" method=post enctype=multipart/form-data action="{{ url_for('tasks.submit_tracklog', task_id=task.id) }}" novalidate>
                     <div class="modal-header">
                         <h5 class="modal-title">Submit Tracklog</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -205,7 +159,7 @@
                     <div class="modal-body text-start">
                         <div class="mb-3">
                             <label for="name" class="form-label">Pilot Name</label>
-                            <input class="form-control" type="text" id="name" name="name">
+                            <input class="form-control" type="text" id="name" name="name" required>
                             <div class="form-text">
                                 Full name. Until we get logins setup, please try to use a consistent name
                             </div>
@@ -219,14 +173,15 @@
                         </div>
                         <div class="mb-3">
                             <label for="glider" class="form-label">Glider</label>
-                            <input class="form-control" type="text" id="glider" name="glider">
+                            <input class="form-control" type="text" id="glider" name="glider" required>
                             <div class="form-text">
                                 Glider make and model. Eg. 'Ozone Delta4'
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="gliderClass" class="form-label">Class</label>
-                            <select name="gliderClass" id="gliderClass" class="form-select">
+                            <select name="gliderClass" id="gliderClass" class="form-select" required>
+                                <option selected disabled value="">-</option>
                                 <option value="EN-A">EN-A</option>
                                 <option value="EN-B">EN-B</option>
                                 <option value="EN-C">EN-C</option>
@@ -239,7 +194,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="tracklogFile" class="form-label">Tracklog File</label>
-                            <input class="form-control" type="file" id="tracklogFile" name="tracklogFile">
+                            <input class="form-control" type="file" id="tracklogFile" name="tracklogFile" required>
                             <div class="form-text">
                                 Only IGC tracklogs are supported.
                             </div>
@@ -254,4 +209,26 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block scripts %} {{ super() }}
+    <script>
+        (function () {
+            'use strict'
+
+            var forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
 {% endblock %}

@@ -35,22 +35,20 @@ def detail(task_id: int):
     if task is None:
         return index()
 
-    task.entries.sort(key=_sort_entries)
-
     entry = None
     entry_id = request.args.get('entry_id')
     if entry_id:
         entry = db.session.query(Entry).get(entry_id)
 
-    ab_entries=db.session.query(Entry).from_statement(text(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='EN-A' OR glider_class='EN-B')")).all()
-    ab_entries.sort(key=_sort_entries)
-
+    task.entries.sort(key=_sort_entries)
+    overall_entries = task.entries
     ab_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='EN-A' OR glider_class='EN-B')")
     c_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND glider_class='EN-C'")
     hot_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='EN-D' OR glider_class='EN-CCC')")
     special_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='Mini' OR glider_class='Parakite')")
 
     return render_template('tasks/detail.html', task=task, entry=entry, category_entries=[
+        {"id": "overall", "name": "Overall", "entries": overall_entries},
         {"id": "ab", "name": "EN-A / EN-B", "entries": ab_entries},
         {"id": "c", "name": "EN-C", "entries": c_entries},
         {"id": "dccc", "name": "EN-D / EN-CCC", "entries": hot_entries},
