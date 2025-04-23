@@ -40,7 +40,7 @@ def detail(task_id: int):
     if entry_id:
         entry = db.session.query(Entry).get(entry_id)
 
-    task.entries.sort(key=_sort_entries)
+    task.entries.sort(key=Task.sort_entries)
     overall_entries = task.entries
     ab_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='EN-A' OR glider_class='EN-B')")
     c_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND glider_class='EN-C'")
@@ -58,15 +58,8 @@ def detail(task_id: int):
 
 def _get_entries(query: str) -> list[Entry]:
     entries = db.session.query(Entry).from_statement(text(query)).all()
-    entries.sort(key=_sort_entries)
+    entries.sort(key=Task.sort_entries)
     return entries
-
-
-def _sort_entries(entry: Entry):
-    if entry.time_seconds:
-        return entry.time_seconds
-    else:
-        return sys.maxsize
 
 
 @tasks_bp.route('/<int:task_id>/tracklog', methods=['POST'])
