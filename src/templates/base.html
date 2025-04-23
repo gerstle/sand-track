@@ -2,74 +2,94 @@
 <html lang="en">
 <head>
     {% block head %}
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>The Sand Track</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>The Sand Track</title>
 
-    {% block styles %}
-    <!-- Bootstrap CSS -->
-    {{ bootstrap.load_css() }}
-    {% endblock %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+        {% block styles %}
+            <!-- Bootstrap CSS -->
+            {{ bootstrap.load_css() }}
+        {% endblock %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
     {% endblock %}
 </head>
-<body>
+<body class="d-flex flex-column h-100">
+<main class="flex-shrink-0">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">The Sand Track</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+                    class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page"
+                                            href="{{ url_for('main.index') }}">home</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('tasks.index') }}">tasks</a></li>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">Files</a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item"
+                                   href="{{ url_for('static', filename='downloads/sand-city-v1.wpt') }}">sand-city-v1.wpt</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider"/>
+                            </li>
+                            <li><a class="dropdown-item"
+                                   href="{{ url_for('static', filename='downloads/xc-league-2024.wpt') }}">xc-league-2024.wpt</a>
+                            </li>
+                            <li><a class="dropdown-item"
+                                   href="{{ url_for('static', filename='downloads/Vaca_waypoints_04152024.wpt') }}">Vaca_waypoints_04152024.wpt</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="container">
-        <a class="navbar-brand" href="{{ url_for('main.index') }}">The Sand Track</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('main.index') }}">home</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('tasks.index') }}">tasks</a></li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">Files</a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item"
-                               href="{{ url_for('static', filename='downloads/sand-city-v1.wpt') }}">sand-city-v1.wpt</a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider"/>
-                        </li>
-                        <li><a class="dropdown-item"
-                               href="{{ url_for('static', filename='downloads/xc-league-2024.wpt') }}">xc-league-2024.wpt</a>
-                        </li>
-                        <li><a class="dropdown-item"
-                               href="{{ url_for('static', filename='downloads/Vaca_waypoints_04152024.wpt') }}">Vaca_waypoints_04152024.wpt</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+        <div class="text-center mt-5">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                            {{ message|safe }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
         </div>
     </div>
-</nav>
+</main>
 
-<div class="container">
-    <div class="text-center mt-5">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }}" role="alert">
-            {{ message|safe }}
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-    </div>
-</div>
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 mx-4 border-top mt-auto fixed-bottom">
+    <p class="col-md-4 mb-0 text-body-secondary">© {{ now.year }} Casey Gerstle</p>
+
+    <a href="/"
+       class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+       aria-label="Bootstrap">
+        <svg class="bi me-2" width="40" height="32" aria-hidden="true">
+            <use xlink:href="#bootstrap"></use>
+        </svg>
+    </a>
+
+    <ul class="nav col-md-4 justify-content-end">
+        <li class="nav-item"><a href="{{ url_for('main.index') }}" class="nav-link px-2 text-body-secondary">home</a></li>
+        <li class="nav-item"><a href="{{ url_for('tasks.index') }}" class="nav-link px-2 text-body-secondary">tasks</a></li>
+    </ul>
+</footer>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 {% block scripts %}
-<!-- Optional JavaScript -->
-{{ bootstrap.load_js() }}
+    <!-- Optional JavaScript -->
+    {{ bootstrap.load_js() }}
 {% endblock %}
+
 </body>
 </html>
