@@ -10,12 +10,23 @@
         {% block styles %}
             <!-- Bootstrap CSS -->
             {{ bootstrap.load_css() }}
+            <style>
+                body {
+                    display: flex;
+                    min-height: 100vh;
+                    flex-direction: column;
+                }
+
+                main {
+                    flex: 1;
+                }
+            </style>
         {% endblock %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
     {% endblock %}
 </head>
-<body class="d-flex flex-column h-100">
-<main class="flex-shrink-0">
+<body>
+<header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('main.index') }}">The Sand Track</a>
@@ -52,6 +63,8 @@
             </div>
         </div>
     </nav>
+</header>
+<main>
     <div class="container">
         <div class="text-center mt-5">
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -67,8 +80,7 @@
         </div>
     </div>
 </main>
-
-<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 mx-4 border-top mt-auto fixed-bottom">
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 mx-4 border-top mt-auto">
     <p class="col-md-4 mb-0 text-body-secondary">© {{ now.year }} Casey Gerstle</p>
 
     <a href="/"

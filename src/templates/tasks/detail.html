@@ -46,13 +46,6 @@
 
     <div class="row">
         <div class="col">
-            <div class="clearfix">
-                <div class="float-start">
-                    <h1>Task: {{ task.name }}</h1>
-                </div>
-            </div>
-        </div>
-        <div class="col">
             <p class="text-end">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#submitTracklogModal">
@@ -61,9 +54,16 @@
             </p>
         </div>
     </div>
-    <div class="clearfix">
-        <div class="float-start">
-            {{ task.description or "" }}
+    <div class="row">
+        <div class="clearfix">
+            <div class="float-start">
+                <h1>Task: {{ task.name }}</h1>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="float-start">
+                {{ task.description or "" }}
+            </div>
         </div>
     </div>
 
