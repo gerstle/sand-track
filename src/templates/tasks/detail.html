@@ -44,22 +44,28 @@
         </div>
     {% endif %}
 
-    <div class="clearfix">
-        <div class="float-start">
-            <h1>Task: {{ task.name }}</h1>
+    <div class="row">
+        <div class="col">
+            <div class="clearfix">
+                <div class="float-start">
+                    <h1>Task: {{ task.name }}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <p class="text-end">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#submitTracklogModal">
+                    submit your tracklog
+                </button>
+            </p>
         </div>
     </div>
     <div class="clearfix">
         <div class="float-start">
-            <h3>{{ task.description or "" }}</h3>
+            {{ task.description or "" }}
         </div>
     </div>
-
-    <p class="text-start">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitTracklogModal">
-            submit your tracklog
-        </button>
-    </p>
 
     <div class="row rounded border bg-light p-2 m-2">
         <div class="col">
@@ -151,7 +157,8 @@
     <div class="modal" tabindex="-1" id="submitTracklogModal">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form class="needs-validation" method=post enctype=multipart/form-data action="{{ url_for('tasks.submit_tracklog', task_id=task.id) }}" novalidate>
+                <form class="needs-validation" method=post enctype=multipart/form-data
+                      action="{{ url_for('tasks.submit_tracklog', task_id=task.id) }}" novalidate>
                     <div class="modal-header">
                         <h5 class="modal-title">Submit Tracklog</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

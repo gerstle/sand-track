@@ -190,16 +190,19 @@ def _tasks() -> List[Task]:
     return [
         Task(
             name="jan 2025",
+            description="an old task that shouldn't show up",
             start=datetime.strptime("2025-01-01 00:00:00-0700", format),
             end=datetime.strptime("2025-02-01 00:00:00-0700", format),
         ),
         Task(
             name="apr 2025",
+            description="first task of the season! Run out to Lake Court, hit the bunkers, and home.",
             start=datetime.strptime("2025-04-01 00:00:00-0700", format),
             end=datetime.strptime("2025-05-01 00:00:00-0700", format),
         ),
         Task(
             name="may 2025",
+            description="a classic may route",
             start=datetime.strptime("2025-05-01 00:00:00-0700", format),
             end=datetime.strptime("2025-06-01 00:00:00-0700", format),
         ),
