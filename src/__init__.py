@@ -1,3 +1,4 @@
+import datetime
 import logging
 from logging.config import dictConfig
 
@@ -6,6 +7,7 @@ from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from tzlocal import get_localzone
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger("sqlalchemy.engine").setLevel(logging.WARN)
@@ -35,6 +37,7 @@ def create_app():
     app = Flask(__name__)
     app.logger.setLevel(logging.INFO)
     app.config.from_pyfile("config.py")
+    app.context_processor(inject_now)
 
     db.init_app(app)
     Migrate(app, db)
@@ -57,3 +60,7 @@ def create_app():
     app.register_blueprint(setup_bp)
 
     return app
+
+
+def inject_now():
+    return {'now': datetime.datetime.now(datetime.timezone.utc).astimezone(get_localzone())}
