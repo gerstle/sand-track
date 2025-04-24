@@ -10,6 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |-
+          ls -l
           sed -i 's/\(version = "[0-9]*\.[0-9]*\.\)[0-9]*"/\1${{github.run_number}}"/' pyproject.toml
           git config --global user.email "gerstle@gmail.com"
           git config --global user.name "casey-bot"
