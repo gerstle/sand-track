@@ -89,10 +89,10 @@ def submit_tracklog(task_id: int):
             state, entry = _process_flight(
                 task,
                 path=path,
-                name=request.form['name'],
-                license=request.form['license'],
-                glider=request.form['glider'],
-                glider_class=request.form['gliderClass'],
+                name=request.form['name'].strip(),
+                license=request.form['license'].strip(),
+                glider=request.form['glider'].strip(),
+                glider_class=request.form['gliderClass'].strip(),
             )
             message = ''
             if state == 'new':
@@ -144,10 +144,12 @@ def _process_flight(
     new_entry.license = license
     new_entry.glider = glider
     new_entry.glider_class = glider_class
-    existing = db.session.query(Entry).filter_by(
+
+    query = f"SELECT * FROM entry WHERE task_id=:task_id AND glider_class=:glider_class AND name like LOWER(:name)"
+    existing =db.session.query(Entry).from_statement(text(query)).params(
         task_id=task.id,
-        name=new_entry.name,
-        glider_class=new_entry.glider_class
+        glider_class=glider_class,
+        name=new_entry.name.lower()
     ).first()
 
     state = None
