@@ -6,7 +6,7 @@ services:
     volumes:
       - data:/data/
     environment:
-      DATABASE_PATH: /data/db/sand-track.sqlite
+      DATABASE_PATH: /data/sand-track.sqlite
       UPLOAD_FOLDER: /data/upload
       GUNICORN_PORT: 3000
       GUNICORN_HOST: 0.0.0.0

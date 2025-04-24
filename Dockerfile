@@ -30,6 +30,7 @@ COPY --from=builder --chown=nonroot:nonroot /app/.venv /app/.venv
 COPY --from=builder --chown=nonroot:nonroot /app/src /app/src
 COPY --from=builder --chown=nonroot:nonroot /app/wsgi.py /app/
 COPY --from=builder --chown=nonroot:nonroot /app/entrypoint.sh /app/
+COPY --from=builder --chown=nonroot:nonroot /app/pyproject.toml /app/
 
 USER nonroot
 
