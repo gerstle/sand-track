@@ -432,6 +432,7 @@ dependencies = [
     { name = "geopy" },
     { name = "gunicorn" },
     { name = "pyyaml" },
+    { name = "toml" },
     { name = "tzlocal" },
 ]
 
@@ -447,6 +448,7 @@ requires-dist = [
     { name = "geopy", specifier = ">=2.4.1" },
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "pyyaml", specifier = ">=6.0.2" },
+    { name = "toml", specifier = ">=0.10.2" },
     { name = "tzlocal", specifier = ">=5.3.1" },
 ]
 
@@ -501,6 +503,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/3e/57/b3684de3e179e6429d71f31efb55183b274f3ffc1bee8cfda138b2b34927/sqlalchemy-2.0.40-cp39-cp39-win32.whl", hash = "sha256:957f8d85d5e834397ef78a6109550aeb0d27a53b5032f7a57f2451e1adc37e98", size = 2087537 },
     { url = "https://files.pythonhosted.org/packages/05/dc/6af9d62239c1115c95a53477092bc4578f0f809962da1680ad75976a8672/sqlalchemy-2.0.40-cp39-cp39-win_amd64.whl", hash = "sha256:1ffdf9c91428e59744f8e6f98190516f8e1d05eec90e936eb08b257332c5e870", size = 2111906 },
     { url = "https://files.pythonhosted.org/packages/d1/7c/5fc8e802e7506fe8b55a03a2e1dab156eae205c91bee46305755e086d2e2/sqlalchemy-2.0.40-py3-none-any.whl", hash = "sha256:32587e2e1e359276957e6fe5dad089758bc042a971a8a09ae8ecf7a8fe23d07a", size = 1903894 },
+]
+
+[[package]]
+name = "toml"
+version = "0.10.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/be/ba/1f744cdc819428fc6b5084ec34d9b30660f6f9daaf70eead706e3203ec3c/toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f", size = 22253 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b", size = 16588 },
 ]
 
 [[package]]

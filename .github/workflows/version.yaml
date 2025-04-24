@@ -1,0 +1,18 @@
+name: version
+on:
+  pull_request:
+permissions:
+  contents: write
+jobs:
+  version:
+    name: version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |-
+          sed -i 's/\(version = "[0-9]*\.[0-9]*\.\)[0-9]*"/\1${{github.run_number}}"/' pyproject.toml
+          git config --global user.email "gerstle@gmail.com"
+          git config --global user.name "casey-bot"
+          git diff --quiet || (git add pyproject.toml && git commit -m "bump version number")
+          git push
+          

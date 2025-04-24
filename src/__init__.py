@@ -1,5 +1,7 @@
 import datetime
 import logging
+import os
+import toml
 from logging.config import dictConfig
 
 from flask import Flask
@@ -37,7 +39,7 @@ def create_app():
     app = Flask(__name__)
     app.logger.setLevel(logging.INFO)
     app.config.from_pyfile("config.py")
-    app.context_processor(inject_now)
+    app.context_processor(inject)
 
     db.init_app(app)
     Migrate(app, db)
@@ -62,5 +64,14 @@ def create_app():
     return app
 
 
-def inject_now():
-    return {'now': datetime.datetime.now(datetime.timezone.utc).astimezone(get_localzone())}
+def inject():
+    version = "-"
+    pyproject_toml_file = os.path.join(os.path.dirname(__file__), "..", "pyproject.toml")
+    if os.path.exists(pyproject_toml_file) and os.path.isfile(pyproject_toml_file):
+        data = toml.load(pyproject_toml_file)
+        version = data["project"]["version"]
+
+    return {
+        'now': datetime.datetime.now(datetime.timezone.utc).astimezone(get_localzone()),
+        'version': version
+    }

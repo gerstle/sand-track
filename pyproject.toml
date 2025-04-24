@@ -15,5 +15,6 @@ dependencies = [
     "geopy>=2.4.1",
     "gunicorn>=23.0.0",
     "pyyaml>=6.0.2",
+    "toml>=0.10.2",
     "tzlocal>=5.3.1",
 ]
