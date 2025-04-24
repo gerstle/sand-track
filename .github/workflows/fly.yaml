@@ -13,6 +13,17 @@ jobs:
       - run: |
           version=$(grep version pyproject.toml | grep -o '[0-9]*\.[0-9]*\.[0-9]*')
           echo "deploying version ${version}"
+          echo "APP_VERSION=${version}" >> $GITHUB_ENV
+      - name: Create tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ env.APP_VERSION }}',
+              sha: context.sha
+            })
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only
         env:
