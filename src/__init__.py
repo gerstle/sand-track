@@ -1,22 +1,32 @@
 import datetime
 import logging
 import os
-import toml
 from logging.config import dictConfig
 
+import toml
 from flask import Flask
+from flask_admin import Admin
 from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager
 from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
 from tzlocal import get_localzone
 
+from src.admin.AuthenticatedModelView import AuthenticatedModelView
+from src.admin.TaskModelView import TaskModelView
+from src.admin.UserModelView import UserModelView
+from src.admin.WaypointGroupModelView import WaypointGroupModelView
+from src.db import db
+from src.models.entry import Entry
+from src.models.task import Task
+from src.models.turnpoint import Turnpoint
+from src.models.user import User
+from src.models.waypoint import Waypoint
+from src.models.waypoint_group import WaypointGroup
+
 logging.basicConfig(level=logging.INFO)
-logging.getLogger("sqlalchemy.engine").setLevel(logging.WARN)
+logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
-db = SQLAlchemy()
 login_manager = LoginManager()
-
 
 def create_app():
     dictConfig({
@@ -45,9 +55,6 @@ def create_app():
     Migrate(app, db)
     Bootstrap5(app)
 
-    # load models/DB
-    from src.models import user, waypoint_group, waypoint, task, turnpoint, entry
-
     # load auth and routes
     login_manager.login_view = "auth.login"
     login_manager.init_app(app)
@@ -61,6 +68,14 @@ def create_app():
     app.register_blueprint(tasks_bp)
     app.register_blueprint(setup_bp)
 
+    admin = Admin(app, name="Sand Track")
+    admin.add_view(UserModelView(User, db.session))
+    admin.add_view(WaypointGroupModelView(WaypointGroup, db.session, category="Waypoints"))
+    admin.add_view(AuthenticatedModelView(Waypoint, db.session, category="Waypoints"))
+    admin.add_view(TaskModelView(Task, db.session, category="Task"))
+    admin.add_view(AuthenticatedModelView(Turnpoint, db.session, category="Task"))
+    admin.add_view(AuthenticatedModelView(Entry, db.session, category="Task"))
+
     return app
 
 
@@ -72,6 +87,6 @@ def inject():
         version = data["project"]["version"]
 
     return {
-        'now': datetime.datetime.now(datetime.timezone.utc).astimezone(get_localzone()),
-        'version': version
+        "now": datetime.datetime.now(datetime.timezone.utc).astimezone(get_localzone()),
+        "version": version
     }

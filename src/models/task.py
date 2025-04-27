@@ -6,7 +6,7 @@ from typing import Optional, List
 from sqlalchemy import DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src import db
+from src.db import db
 from src.models.entry import Entry
 
 logger = logging.getLogger(__name__)
@@ -35,3 +35,10 @@ class Task(db.Model):
             return entry.time_seconds
         else:
             return sys.maxsize
+
+    @property
+    def id_and_name(self):
+        return f"({self.id}) {self.name}"
+
+    def __repr__(self):
+        return f"<Task(id='{self.id}' name='{self.name}')>"

@@ -6,7 +6,7 @@ from src.models.waypoint import Waypoint
 from src.models.waypoint_group import WaypointGroup
 from src.models.entry import Entry
 from typing import List
-from src import db
+from src.db import db
 from datetime import datetime
 from faker import Faker
 

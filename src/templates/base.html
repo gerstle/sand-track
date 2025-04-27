@@ -36,14 +36,15 @@
                     class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page"
-                                            href="{{ url_for('main.index') }}">home</a>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('main.index') }}">home</a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('tasks.index') }}">tasks</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('tasks.index') }}">tasks</a>
+                    </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">Files</a>
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Files</a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item"
                                    href="{{ url_for('static', filename='downloads/sand-city-v1.wpt') }}">sand-city-v1.wpt</a>
@@ -51,15 +52,26 @@
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>
-                            <li><a class="dropdown-item"
-                                   href="{{ url_for('static', filename='downloads/xc-league-2024.wpt') }}">xc-league-2024.wpt</a>
+                            <li><a class="dropdown-item" href="{{ url_for('static', filename='downloads/xc-league-2024.wpt') }}">xc-league-2024.wpt</a>
                             </li>
-                            <li><a class="dropdown-item"
-                                   href="{{ url_for('static', filename='downloads/Vaca_waypoints_04152024.wpt') }}">Vaca_waypoints_04152024.wpt</a>
+                            <li><a class="dropdown-item" href="{{ url_for('static', filename='downloads/Vaca_waypoints_04152024.wpt') }}">Vaca_waypoints_04152024.wpt</a>
                             </li>
                         </ul>
                     </li>
+
+                    {% if current_user.is_authenticated and current_user.is_admin %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.index') }}" target="_blank" rel="noopener noreferrer">admin</a>
+                        </li>
+                    {%  endif %}
+
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.logout') }}">logout</a>
+                        </li>
+                    {%  endif %}
                 </ul>
+
             </div>
         </div>
     </nav>
@@ -90,6 +102,9 @@
     <ul class="nav col-md-4 justify-content-end">
         <li class="nav-item"><a href="{{ url_for('main.index') }}" class="nav-link px-2 text-body-secondary">home</a></li>
         <li class="nav-item"><a href="{{ url_for('tasks.index') }}" class="nav-link px-2 text-body-secondary">tasks</a></li>
+        {%  if not current_user.is_authenticated %}
+            <li class="nav-item"><a href="{{ url_for('auth.login') }}" class="nav-link px-2 text-body-secondary">login</a></li>
+        {%  endif %}
     </ul>
 </footer>
 

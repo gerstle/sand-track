@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import and_, or_
 from sqlalchemy.sql import func
 
-from src import db
+from src.db import db
 
 
 def remove_key(d, key):
