@@ -20,3 +20,5 @@ SQLALCHEMY_DATABASE_URI = "sqlite:///{}".format(environ.get("DATABASE_PATH") or 
 
 logger.info(f"Using DB {SQLALCHEMY_DATABASE_URI}")
 UPLOAD_FOLDER = environ.get("UPLOAD_FOLDER") or "/tmp"
+
+FLAST_ADMIN_SWATCH = environ.get("FLASK_ADMIN_SWATCH") or "cerulean"

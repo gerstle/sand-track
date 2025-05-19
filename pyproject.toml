@@ -1,6 +1,6 @@
 [project]
 name = "sand-track"
-version = "0.1.9"
+version = "0.1.10"
 description = "A simple paragliding task site"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -9,6 +9,7 @@ dependencies = [
     "dotenv>=0.9.9",
     "faker>=37.1.0",
     "flask>=3.1.0",
+    "flask-admin>=v2.0.0a4",
     "flask-login>=0.6.3",
     "flask-migrate>=4.1.0",
     "flask-sqlalchemy>=3.1.1",

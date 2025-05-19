@@ -100,6 +100,22 @@ wheels = [
 ]
 
 [[package]]
+name = "flask-admin"
+version = "2.0.0a4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "flask" },
+    { name = "jinja2" },
+    { name = "markupsafe" },
+    { name = "werkzeug" },
+    { name = "wtforms" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a2/63/5b4dcce35e696993e5c1319d4ac68e825b8496bb718b6a623785e023af6c/flask_admin-2.0.0a4.tar.gz", hash = "sha256:141cf19de079d26db6d2d674b9a470449d6561a2ba1252eff61e597d981b72c7", size = 5489076 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c3/13/f4d637d4cdff5091c3d7d96796768b7c3d87af464534723abbabbfab878e/flask_admin-2.0.0a4-py3-none-any.whl", hash = "sha256:dbe430eec1ad8918d130d522265910db7e9f49a5d4c12438175e0f61eb02c2a3", size = 6403892 },
+]
+
+[[package]]
 name = "flask-login"
 version = "0.6.3"
 source = { registry = "https://pypi.org/simple" }
@@ -419,13 +435,14 @@ wheels = [
 
 [[package]]
 name = "sand-track"
-version = "0.1.8"
+version = "0.1.9"
 source = { virtual = "." }
 dependencies = [
     { name = "bootstrap-flask" },
     { name = "dotenv" },
     { name = "faker" },
     { name = "flask" },
+    { name = "flask-admin" },
     { name = "flask-login" },
     { name = "flask-migrate" },
     { name = "flask-sqlalchemy" },
@@ -442,6 +459,7 @@ requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "faker", specifier = ">=37.1.0" },
     { name = "flask", specifier = ">=3.1.0" },
+    { name = "flask-admin", specifier = ">=2.0.0a4" },
     { name = "flask-login", specifier = ">=0.6.3" },
     { name = "flask-migrate", specifier = ">=4.1.0" },
     { name = "flask-sqlalchemy", specifier = ">=3.1.1" },

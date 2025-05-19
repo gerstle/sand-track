@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src import db
+from src.db import db
 
 
 class Waypoint(db.Model):
@@ -15,3 +15,6 @@ class Waypoint(db.Model):
     long: Mapped[float]
     altitude: Mapped[float]
     description: Mapped[Optional[str]]
+
+    def __repr__(self):
+        return f"<Waypoint(id='{self.id}' name='{self.name}')>"

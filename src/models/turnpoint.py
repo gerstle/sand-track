@@ -1,7 +1,7 @@
 from typing import Optional
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from src import db
+from src.db import db
 from sqlalchemy import ForeignKey
 
 class Turnpoint(db.Model):
@@ -13,3 +13,6 @@ class Turnpoint(db.Model):
     waypoint: Mapped["Waypoint"] = relationship()
     radius: Mapped[int]
     tag: Mapped[Optional[str]]
+
+    def __repr__(self):
+        return f"<Turnpoint(order='{self.order}' waypoint='{self.waypoint.name}', radius='{self.radius}', tag='{self.tag}')>"

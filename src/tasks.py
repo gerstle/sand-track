@@ -1,6 +1,5 @@
 import datetime
 import os
-import sys
 from enum import Enum
 from typing import Tuple
 from zoneinfo import ZoneInfo
@@ -10,7 +9,7 @@ from geopy import distance
 from sqlalchemy import or_, text
 from werkzeug.utils import secure_filename
 
-from src import db
+from src.db import db
 from src.models.entry import Entry
 from src.models.task import Task
 from src.models.turnpoint import Turnpoint
