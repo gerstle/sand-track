@@ -36,7 +36,7 @@ def seed_db():
     print("done.")
 
 
-def _add(records: []):
+def _add(records: list):
     for it in records:
         db.session.add(it)
     db.session.commit()
@@ -223,29 +223,29 @@ def _real_turnpoints(task: Task, waypoints: List[Waypoint]) -> List[Turnpoint]:
         Turnpoint(
             task_id=task.id,
             order=1,
-            waypoint_id=_find_waypoint(waypoints, "SC-LAUNCH").id,
+            waypoint=_find_waypoint(waypoints, "SC-LAUNCH"),
             radius=50,
         ),
         Turnpoint(
             task_id=task.id,
             order=2,
-            waypoint_id=_find_waypoint(waypoints, "LC").id,
+            waypoint=_find_waypoint(waypoints, "LC"),
             radius=100,
         ),
         Turnpoint(
             task_id=task.id,
             order=3,
-            waypoint_id=_find_waypoint(waypoints, "BUNKERS").id,
+            waypoint=_find_waypoint(waypoints, "BUNKERS"),
             radius=25,
         ),
         Turnpoint(
             task_id=task.id,
             order=4,
-            waypoint_id=_find_waypoint(waypoints, "SC-LAUNCH").id,
+            waypoint=_find_waypoint(waypoints, "SC-LAUNCH"),
             radius=50,
         ),
     ]
-    print(f"task_points: {task_points}")
+    # print(f"task_points: {task_points}")
     task_points[0].tag = "SSS"
     task_points[-2].tag = "ESS"
     task_points[-1].tag = "GOAL"
@@ -267,7 +267,7 @@ def _turnpoints(tasks: List[Task], waypoints: List[Waypoint]) -> List[Turnpoint]
                     radius=random.randint(25, 1000),
                 )
             )
-        print(f"task_points: {task_points}")
+        # print(f"task_points: {task_points}")
         task_points[0].tag = "SSS"
         task_points[-2].tag = "ESS"
         task_points[-1].tag = "GOAL"
