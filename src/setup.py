@@ -245,7 +245,7 @@ def _real_turnpoints(task: Task, waypoints: List[Waypoint]) -> List[Turnpoint]:
             radius=50,
         ),
     ]
-    print(f"task_points: {task_points}")
+    # print(f"task_points: {task_points}")
     task_points[0].tag = "SSS"
     task_points[-2].tag = "ESS"
     task_points[-1].tag = "GOAL"
@@ -267,7 +267,7 @@ def _turnpoints(tasks: List[Task], waypoints: List[Waypoint]) -> List[Turnpoint]
                     radius=random.randint(25, 1000),
                 )
             )
-        print(f"task_points: {task_points}")
+        # print(f"task_points: {task_points}")
         task_points[0].tag = "SSS"
         task_points[-2].tag = "ESS"
         task_points[-1].tag = "GOAL"
