@@ -14,6 +14,7 @@ Just a little thing to help us run task competitions at local flying sites.
 - create app
 - create volume
 - create secret `SECRET_KEY`
+- create a deploy token and set it under the github repo's action secrets as `FLY_API_TOKEN`
 
 ## seed the DB
 

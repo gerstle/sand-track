@@ -32,6 +32,8 @@ upload_dir=$(dirname "$UPLOAD_FOLDER")
 if [ ! -d "${upload_dir}" ]; then
     echo "Creating ${upload_dir}..."
     mkdir -p "${upload_dir}"
+else
+  echo "upload folder already exists: ${UPLOAD_FOLDER}"
 fi
 
 echo "running migrations..."
