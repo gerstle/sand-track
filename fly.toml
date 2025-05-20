@@ -21,3 +21,14 @@ primary_region = 'lax'
   cpu_kind = 'shared'
   cpus = 1
   memory_mb = 512
+
+[env]
+  GUNICORN_HOST = '0.0.0.0'
+  GUNICORN_PORT = 3000
+  DATABASE_PATH = '/data/db/sand-track.sqlite'
+  UPLOAD_FOLDER = '/data/upload'
+
+[mounts]
+  source = "sandtrack"
+  destination = "/data"
+  initial_size = "5gb"
