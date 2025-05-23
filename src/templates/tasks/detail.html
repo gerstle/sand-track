@@ -67,54 +67,56 @@
         </div>
     </div>
 
-    <div class="row rounded bg-light m-2">
-        <div class="col">
-            <div class="row text-start">
-                <button class="btn btn-secondary text-start" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#turnpoints"
-                        aria-expanded="false" aria-controls="turnpoints">
+
+
+    <div class="accordion m-2" id="accordion-turnpoints">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-turnpoints" aria-expanded="true" aria-controls="collapse-turnpoints">
                     turnpoints
                 </button>
-            </div>
-            <div class="row mt-3 collapse multi-collapse show" id="turnpoints">
-                <div class="col">
-                    <div class="table-responsive-xl">
-                        <table class="table table-hover table-striped">
-                            <thead>
+            </h2>
+            <div id="collapse-turnpoints" class="accordion-collapse collapse show"
+                 data-bs-parent="#accordion-turnpoints">
+                <div class="accordion-body">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th class="text-start"></th>
+                            <th class="text-start">name</th>
+                            <th class="text-start">radius (meters)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for tp in task.turnpoints %}
                             <tr>
-                                <th class="text-start"></th>
-                                <th class="text-start">name</th>
-                                <th class="text-start">radius (meters)</th>
+                                <td class="text-start">{{ tp.tag or "" }}</td>
+                                <td class="text-start">{{ tp.waypoint.name }}</td>
+                                <td class="text-start">{{ tp.radius }}</td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {% for tp in task.turnpoints %}
-                                <tr>
-                                    <td class="text-start">{{ tp.tag or "" }}</td>
-                                    <td class="text-start">{{ tp.waypoint.name }}</td>
-                                    <td class="text-start">{{ tp.radius }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row rounded bg-light m-2">
-        <div class="col">
-            <div class="row text-start">
-                <button class="btn btn-secondary text-start" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#turnpoints"
-                        aria-expanded="false" aria-controls="turnpoints">
-                    QR code
+    <div class="accordion m-2" id="accordion-qrcode">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-qrcode" aria-expanded="false" aria-controls="collapse-qrcode">
+                    qrcode
                 </button>
-            </div>
-            <div class="row mt-3 collapse multi-collapse show" id="turnpoints">
-                <div class="col col-md-12 col-lg-4 mx-auto">
-                    <img class="img-fluid rounded" src="{{ url_for('static', filename='img/task-may-qr.png') }}" alt="QR code">
+            </h2>
+            <div id="collapse-qrcode" class="accordion-collapse collapse" data-bs-parent="#accordion-qrcode">
+                <div class="accordion-body">
+                    <div class="col col-md-12 col-lg-4 mx-auto">
+                        <img class="img-fluid rounded" src="{{ url_for('static', filename='img/task-may-qr.png') }}"
+                             alt="QR code">
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,45 +124,44 @@
 
     {% for category in category_entries %}
         {% if category.entries | length > 0 %}
-            <div class="row rounded bg-light m-2">
-                <div class="col">
-                    <div class="row">
-                        <button class="btn btn-secondary text-start" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#{{ category.id }}-results"
-                                aria-expanded="false" aria-controls="{{ category.id }}-results">
+            <div class="accordion m-2" id="accordion-{{ category.id }}">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-{{ category.id }}" aria-expanded="false"
+                                aria-controls="collapse-{{ category.id }}">
                             {{ category.name }}
                         </button>
-                    </div>
-                    <div class="row mt-3 collapse multi-collapse show" id="{{ category.id }}-results">
-                        <div class="col">
-                            <div class="table-responsive-xl">
-                                <table class="table table-hover table-striped">
-                                    <thead>
+                    </h2>
+                    <div id="collapse-{{ category.id }}" class="accordion-collapse collapse show"
+                         data-bs-parent="#accordion-{{ category.id }}">
+                        <div class="accordion-body">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="text-start"></th>
+                                    <th class="text-start">name</th>
+                                    <th class="text-start">glider</th>
+                                    <th class="text-start">class</th>
+                                    <th class="text-start d-none d-lg-block">start</th>
+                                    <th class="text-start">time</th>
+                                    <th class="text-start">status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for e in category.entries %}
                                     <tr>
-                                        <th class="text-start"></th>
-                                        <th class="text-start">name</th>
-                                        <th class="text-start">glider</th>
-                                        <th class="text-start">class</th>
-                                        <th class="text-start d-none d-lg-block">start</th>
-                                        <th class="text-start">time</th>
-                                        <th class="text-start">status</th>
+                                        <td class="text-start">{{ loop.index0 + 1 }}</td>
+                                        <td class="text-start">{{ e.name }}</td>
+                                        <td class="text-start">{{ e.glider }}</td>
+                                        <td class="text-start">{{ e.glider_class }}</td>
+                                        <td class="text-start d-none d-lg-block">{{ e.start or '-' }}</td>
+                                        <td class="text-start">{{ e.elapsed() or '-' }}</td>
+                                        <td class="text-start">{{ e.status }}</td>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for e in category.entries %}
-                                        <tr>
-                                            <td class="text-start">{{ loop.index0 + 1 }}</td>
-                                            <td class="text-start">{{ e.name }}</td>
-                                            <td class="text-start">{{ e.glider }}</td>
-                                            <td class="text-start">{{ e.glider_class }}</td>
-                                            <td class="text-start d-none d-lg-block">{{ e.start or '-' }}</td>
-                                            <td class="text-start">{{ e.elapsed() or '-' }}</td>
-                                            <td class="text-start">{{ e.status }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

@@ -1,2 +1,13 @@
-body { background: #00f1cd !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
-[data-href] { cursor: pointer; }
+body {
+    background: #00f1cd !important;
+}
+
+/* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+[data-href] {
+    cursor: pointer;
+}
+
+.accordion-button:not(.collapsed) {
+    color: white;
+    background-color: #7b8996;
+}
