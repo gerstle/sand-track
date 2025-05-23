@@ -50,7 +50,7 @@ def detail(task_id: int):
         {"id": "overall", "name": "Overall", "entries": overall_entries},
         {"id": "ab", "name": "EN-A / EN-B", "entries": ab_entries},
         {"id": "c", "name": "EN-C", "entries": c_entries},
-        {"id": "dccc", "name": "EN-D / EN-CCC", "entries": hot_entries},
+        {"id": "dccc", "name": "EN-D / CCC", "entries": hot_entries},
         {"id": "cool", "name": "Cool Kids", "entries": special_entries}
     ])
 
