@@ -9,12 +9,9 @@ from flask_admin import Admin
 from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from sqlalchemy.orm.mapper import configure_mappers
 from tzlocal import get_localzone
 
-from src.admin.AuthenticatedModelView import AuthenticatedModelView
-from src.admin.TaskModelView import TaskModelView
-from src.admin.UserModelView import UserModelView
-from src.admin.WaypointGroupModelView import WaypointGroupModelView
 from src.db import db
 from src.models.entry import Entry
 from src.models.task import Task
@@ -22,11 +19,16 @@ from src.models.turnpoint import Turnpoint
 from src.models.user import User
 from src.models.waypoint import Waypoint
 from src.models.waypoint_group import WaypointGroup
+from src.admin.AuthenticatedModelView import AuthenticatedModelView
+from src.admin.TaskModelView import TaskModelView
+from src.admin.UserModelView import UserModelView
+from src.admin.WaypointGroupModelView import WaypointGroupModelView
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
 login_manager = LoginManager()
+
 
 def create_app():
     dictConfig({
@@ -68,6 +70,7 @@ def create_app():
     app.register_blueprint(tasks_bp)
     app.register_blueprint(setup_bp)
 
+    configure_mappers()
     admin = Admin(app, name="Sand Track")
     admin.add_view(UserModelView(User, db.session))
     admin.add_view(WaypointGroupModelView(WaypointGroup, db.session, category="Waypoints"))

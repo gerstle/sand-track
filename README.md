@@ -15,6 +15,13 @@ Just a little thing to help us run task competitions at local flying sites.
 - create volume
 - create secret `SECRET_KEY`
 - create a deploy token and set it under the github repo's action secrets as `FLY_API_TOKEN`
+- my upload folder check is not working, so...
+
+    ```shell
+    fly ssh console
+    mkdir /data/upload
+    chown nonroot:nonroot /data/upload  
+    ```
 
 ## seed the DB
 

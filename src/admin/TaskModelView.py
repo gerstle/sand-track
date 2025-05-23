@@ -1,4 +1,4 @@
-from src import AuthenticatedModelView
+from src import AuthenticatedModelView, Turnpoint, Entry
 
 
 class TaskModelView(AuthenticatedModelView):
@@ -11,3 +11,4 @@ class TaskModelView(AuthenticatedModelView):
             'disabled': True
         },
     }
+    inline_models = (Turnpoint, Entry)

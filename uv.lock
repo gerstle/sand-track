@@ -435,7 +435,7 @@ wheels = [
 
 [[package]]
 name = "sand-track"
-version = "0.1.11"
+version = "0.1.18"
 source = { virtual = "." }
 dependencies = [
     { name = "bootstrap-flask" },
