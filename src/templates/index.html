@@ -1,13 +1,90 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title">
-    Welcome to The Sand Track
-</h1>
-<h2 class="subtitle">
-    Sand City Racing Club
-</h2>
-<p>
-    A friendly paragliding race circuit for (mostly) Monterey Bay.
-</p>
+    <h1 class="title">
+        Welcome to The Sand Track
+    </h1>
+    <h2 class="subtitle">
+        Sand City Racing Club
+    </h2>
+    <p>
+        A friendly paragliding race circuit for (mostly) Monterey Bay.
+    </p>
+
+    <div class="card m-4">
+        <img src="{{ url_for("static", filename="img/header-marina-2.jpg") }}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title text-start">Welcome</h5>
+            <p class="card-text text-start">
+                The Sand City Racing Club is an open group focused on fostering community, sharing knowledge, and having
+                fun with
+                your fellow paragliders.
+                We welcome everyone to join us for some friendly racing.
+                We hope to encourage you to push your flying boundaries,
+                learn how to use your instruments, practice flying tasks, and have fun while flying our beloved Monterey
+                Bay dunes.
+            </p>
+        </div>
+    </div>
+
+    <div class="card m-4">
+        <img src="{{ url_for("static", filename="img/header-marina-3.jpg") }}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title text-start">How it works</h5>
+            <p class="card-text text-start">
+            <ul class="text-start">
+                <li>There's no sign-up or fees, but you can always buy us a beer if you'd like.</li>
+                <li>Tasks are usually open for a week to a month.</li>
+                <li>Fly them whenever you want.</li>
+                <li>On whatever wing you want.</li>
+                <li>Upload as many tracklogs as you want, but you only get one entry per task per glider class. The best
+                    one is always chosen.
+                </li>
+                <li>Scoring is done solely by time.</li>
+                <li>The clock starts when you exit the Start of Speed Section cylinder and ends when you enter the End
+                    of Speed Section cylinder.
+                </li>
+                <li>Yes, you still have to make it to GOAL.</li>
+            </ul>
+            </p>
+        </div>
+    </div>
+
+    <div class="card m-4">
+        <img src="{{ url_for("static", filename="img/header-marina-4.jpg") }}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title text-start">Getting Started</h5>
+            <p class="card-text">
+            <ol class="text-start">
+                <li>Download the <strong>sand-city-v1.wpt</strong> waypoint file from the "Files" download menu and load
+                    it on your flight computer.
+                </li>
+                <li>Click on the <a href="{{ url_for('tasks.index') }}">Tasks</a> link to see a list of tasks.</li>
+                <li>Find the task you want to fly and click "Details" on that task.</li>
+                <li>Either put in the turnpoints manually or use the QR code to load the task into your flight
+                    computer.
+                </li>
+                <li>Go fly the task!</li>
+                <li>Upload your tracklog (.igc file) on the task details page.</li>
+                <li>Checkout Doctor Doug's youtube video below for a more visual walk through.</li>
+            </ol>
+            </p>
+        </div>
+    </div>
+
+    <div class="card m-4">
+        <img src="{{ url_for("static", filename="img/header-marina-5.jpg") }}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title text-start">Doctor Doug's Tutorial</h5>
+            <iframe height="400" src="https://www.youtube.com/embed/qcKscfbtEVc?si=qeHoWaIlJGMOHc0p"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+
+            </iframe>
+            <p class="card-text">
+                Yeah, we should redo this on a wide screen or something.
+            </p>
+        </div>
+    </div>
 {% endblock %}
