@@ -47,7 +47,8 @@
     <div class="row">
         <div class="col">
             <p class="text-end">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submitTracklogModal">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#submitTracklogModal">
                     Submit Tracklog
                 </button>
             </p>
@@ -66,15 +67,14 @@
         </div>
     </div>
 
-    <div class="row rounded border bg-light p-2 m-2">
+    <div class="row rounded bg-light m-2">
         <div class="col">
             <div class="row text-start">
-                <div class="col">
-                    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#turnpoints"
-                            aria-expanded="false" aria-controls="turnpoints">turnpoints
-                    </button>
-                </div>
+                <button class="btn btn-secondary text-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#turnpoints"
+                        aria-expanded="false" aria-controls="turnpoints">
+                    turnpoints
+                </button>
             </div>
             <div class="row mt-3 collapse multi-collapse show" id="turnpoints">
                 <div class="col">
@@ -103,18 +103,33 @@
         </div>
     </div>
 
+    <div class="row rounded bg-light m-2">
+        <div class="col">
+            <div class="row text-start">
+                <button class="btn btn-secondary text-start" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#turnpoints"
+                        aria-expanded="false" aria-controls="turnpoints">
+                    QR code
+                </button>
+            </div>
+            <div class="row mt-3 collapse multi-collapse show" id="turnpoints">
+                <div class="col col-md-12 col-lg-4 mx-auto">
+                    <img class="img-fluid rounded" src="{{ url_for('static', filename='img/task-may-qr.png') }}" alt="QR code">
+                </div>
+            </div>
+        </div>
+    </div>
+
     {% for category in category_entries %}
         {% if category.entries | length > 0 %}
-            <div class="row rounded border bg-light p-2 m-2">
+            <div class="row rounded bg-light m-2">
                 <div class="col">
-                    <div class="row text-start">
-                        <div class="col">
-                            <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#{{ category.id }}-results"
-                                    aria-expanded="false" aria-controls="{{ category.id }}-results">
-                                {{ category.name }}
-                            </button>
-                        </div>
+                    <div class="row">
+                        <button class="btn btn-secondary text-start" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#{{ category.id }}-results"
+                                aria-expanded="false" aria-controls="{{ category.id }}-results">
+                            {{ category.name }}
+                        </button>
                     </div>
                     <div class="row mt-3 collapse multi-collapse show" id="{{ category.id }}-results">
                         <div class="col">
