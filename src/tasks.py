@@ -181,10 +181,15 @@ def _parse_trackfile(path: str) -> dict[str, list[dict[str, int | float]] | str 
     track = {'breadcrumbs': breadcrumbs}
     with open(path, 'r') as file:
         for line in file:
-            if line.startswith('HFPLTPILOTINCHARGE'):
+            if line.startswith('HFPLTPILOTINCHARGE') or line.startswith('HFPLTPILOT'):
                 track['pilot'] = line.split(':')[1].strip()
             if line.startswith('HFDTEDATE'):
                 date = line.split(':')[1].strip()
+                track['day'] = int(date[0:2])
+                track['month'] = int(date[2:4])
+                track['year'] = 2000 + int(date[4:6])
+            elif line.startswith('HFDTE'):
+                date = line[5:]
                 track['day'] = int(date[0:2])
                 track['month'] = int(date[2:4])
                 track['year'] = 2000 + int(date[4:6])
@@ -302,7 +307,8 @@ def _flight_to_entry(task: Task, flight: dict[str, list[dict[str, int | float]] 
         time = (end_time - start_time).total_seconds()
     current_app.logger.debug(f'final status: {status} time: {time}')
 
-    return Entry(task_id=task.id, name=flight['pilot'], start=start_time, end=end_time, time_seconds=time,
+    pilot = flight['pilot'] if 'pilot' in flight else None
+    return Entry(task_id=task.id, name=pilot, start=start_time, end=end_time, time_seconds=time,
                  status=status)
 
 
