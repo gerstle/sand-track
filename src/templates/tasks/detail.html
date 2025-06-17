@@ -45,22 +45,38 @@
     {% endif %}
 
     {% if task_open %}
-    <div class="row">
-        <div class="col">
-            <p class="text-end">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#submitTracklogModal">
-                    Submit Tracklog
-                </button>
-            </p>
+        <div class="row">
+            <div class="col">
+                <p class="text-end">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#submitTracklogModal">
+                        Submit Tracklog
+                    </button>
+                </p>
+            </div>
         </div>
-    </div>
-    {%  endif %}
+    {% else %}
+        <div class="row">
+            <div class="col">
+                <p class="text-end">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#submitTracklogModal" disabled>
+                        Submissions are Closed
+                    </button>
+                </p>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="row">
         <div class="clearfix">
             <div class="float-start">
                 <h1>Task: {{ task.name }}</h1>
+            </div>
+        </div>
+        <div>
+            <div class="float-start">
+                {{ task.start.strftime("%Y-%m-%d") }} &rarr; {{ task.end.strftime("%Y-%m-%d") }}
             </div>
         </div>
         <div class="clearfix">
@@ -72,58 +88,63 @@
 
 
 
-    <div class="accordion m-2" id="accordion-turnpoints">
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapse-turnpoints" aria-expanded="true" aria-controls="collapse-turnpoints">
-                    turnpoints
-                </button>
-            </h2>
-            <div id="collapse-turnpoints" class="accordion-collapse collapse show"
-                 data-bs-parent="#accordion-turnpoints">
-                <div class="accordion-body">
-                    <table class="table table-hover table-striped">
-                        <thead>
-                        <tr>
-                            <th class="text-start"></th>
-                            <th class="text-start">name</th>
-                            <th class="text-start">radius (meters)</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for tp in task.turnpoints %}
+    {% if task.turnpoints|length > 0 %}
+        <div class="accordion m-2" id="accordion-turnpoints">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse-turnpoints" aria-expanded="true"
+                            aria-controls="collapse-turnpoints">
+                        turnpoints
+                    </button>
+                </h2>
+                <div id="collapse-turnpoints" class="accordion-collapse collapse show"
+                     data-bs-parent="#accordion-turnpoints">
+                    <div class="accordion-body">
+                        <table class="table table-hover table-striped">
+                            <thead>
                             <tr>
-                                <td class="text-start">{{ tp.tag or "" }}</td>
-                                <td class="text-start">{{ tp.waypoint.name }}</td>
-                                <td class="text-start">{{ tp.radius }}</td>
+                                <th class="text-start"></th>
+                                <th class="text-start">name</th>
+                                <th class="text-start">radius (meters)</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="accordion m-2" id="accordion-qrcode">
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapse-qrcode" aria-expanded="false" aria-controls="collapse-qrcode">
-                    qrcode
-                </button>
-            </h2>
-            <div id="collapse-qrcode" class="accordion-collapse collapse" data-bs-parent="#accordion-qrcode">
-                <div class="accordion-body">
-                    <div class="col col-md-12 col-lg-4 mx-auto">
-                        <img class="img-fluid rounded" src="{{ url_for('static', filename='img/task-may-qr.png') }}"
-                             alt="QR code">
+                            </thead>
+                            <tbody>
+                            {% for tp in task.turnpoints %}
+                                <tr>
+                                    <td class="text-start">{{ tp.tag or "" }}</td>
+                                    <td class="text-start">{{ tp.waypoint.name }}</td>
+                                    <td class="text-start">{{ tp.radius }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="accordion m-2" id="accordion-qrcode">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse-qrcode" aria-expanded="false" aria-controls="collapse-qrcode">
+                        qrcode
+                    </button>
+                </h2>
+                <div id="collapse-qrcode" class="accordion-collapse collapse" data-bs-parent="#accordion-qrcode">
+                    <div class="accordion-body">
+                        <div class="col col-md-12 col-lg-4 mx-auto">
+                            <img class="img-fluid rounded" src="{{ url_for('static', filename='img/task-may-qr.png') }}"
+                                 alt="QR code">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>Still being setup, check back soon...</p>
+    {% endif %}
 
     {% for category in category_entries %}
         {% if category.entries | length > 0 %}

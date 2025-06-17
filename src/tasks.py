@@ -52,11 +52,11 @@ def detail(task_id: int):
         f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='Mini' OR glider_class='Parakite')")
 
     now = datetime.datetime.now(tz=ZoneInfo('America/Los_Angeles'))
-    now = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
+    now = datetime.datetime(now.year, now.month, now.day, now.hour, now.minute, now.second)
     return render_template(
         'tasks/detail.html',
         task=task,
-        task_open=(task.end >= now),
+        task_open=((not task.submissions_closed) or task.submissions_closed >= now),
         entry=entry,
         category_entries=[
             {"id": "overall", "name": "Overall", "entries": overall_entries},
@@ -64,7 +64,8 @@ def detail(task_id: int):
             {"id": "c", "name": "EN-C", "entries": c_entries},
             {"id": "dccc", "name": "EN-D / CCC", "entries": hot_entries},
             {"id": "cool", "name": "Cool Kids", "entries": special_entries}
-        ]
+        ],
+        now=now
     )
 
 
