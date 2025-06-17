@@ -25,8 +25,8 @@ def index():
     now = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
     return render_template(
         'tasks/index.html',
-        current_tasks=db.session.query(Task).order_by(Task.id.desc()).filter(Task.end >= now),
-        past_tasks=db.session.query(Task).order_by(Task.id.desc()).filter(Task.end < now),
+        current_tasks=db.session.query(Task).order_by(Task.id.desc()).filter(Task.end >= now).all(),
+        past_tasks=db.session.query(Task).order_by(Task.id.desc()).filter(Task.end < now).all(),
     )
 
 
