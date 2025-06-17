@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% if current_tasks is defined and current_tasks|length > 0 %}
     <h1 class="title">
         Current Tasks
     </h1>
@@ -29,7 +30,9 @@
             </div>
         </div>
     {% endfor %}
+    {% endif %}
 
+    {% if past_tasks is defined and past_tasks|length > 0 %}
     <br>
     <br>
     <h1 class="title">
@@ -60,4 +63,5 @@
             </div>
         </div>
     {% endfor %}
+    {% endif %}
 {% endblock %}
