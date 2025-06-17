@@ -2,9 +2,40 @@
 
 {% block content %}
     <h1 class="title">
-        Current tasks
+        Current Tasks
     </h1>
-    {% for t in tasks %}
+    {% for t in current_tasks %}
+        <div class="card m-2">
+            <div class="card-header text-start">
+                <div class="row">
+                    <div class="col-4">
+                        {{ t.name }}
+                    </div>
+                    <div class="col-8 text-end">
+                        {{ t.start.strftime("%Y-%m-%d") }} &rarr; {{ t.end.strftime("%Y-%m-%d") }}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body text-start">
+                <h5 class="card-title">{{ t.description or t.name }}</h5>
+                <p class="card-text">
+                </p>
+                <p class="card-text">
+                    <strong>Current leader</strong>: {{ t.current_leader() }}
+                </p>
+                <div class="text-end">
+                    <a href=" {{ url_for('tasks.detail', task_id=t.id) }}" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <br>
+    <br>
+    <h1 class="title">
+        Past Tasks
+    </h1>
+    {% for t in past_tasks %}
         <div class="card m-2">
             <div class="card-header text-start">
                 <div class="row">
