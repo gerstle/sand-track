@@ -44,6 +44,7 @@
         </div>
     {% endif %}
 
+    {% if task_open %}
     <div class="row">
         <div class="col">
             <p class="text-end">
@@ -54,6 +55,8 @@
             </p>
         </div>
     </div>
+    {%  endif %}
+
     <div class="row">
         <div class="clearfix">
             <div class="float-start">

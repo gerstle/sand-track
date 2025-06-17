@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 
 from flask import Blueprint, request, render_template, flash, redirect, url_for, current_app
 from geopy import distance
-from sqlalchemy import or_, text
+from sqlalchemy import text
 from werkzeug.utils import secure_filename
 
 from src.db import db
@@ -25,7 +25,9 @@ def index():
     now = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
     return render_template(
         'tasks/index.html',
-        tasks=db.session.query(Task).order_by(Task.id).filter(or_(Task.start >= now, Task.end >= now)))
+        current_tasks=db.session.query(Task).order_by(Task.id.desc()).filter(Task.end >= now),
+        past_tasks=db.session.query(Task).order_by(Task.id.desc()).filter(Task.end < now),
+    )
 
 
 @tasks_bp.route('/<int:task_id>')
@@ -41,18 +43,29 @@ def detail(task_id: int):
 
     task.entries.sort(key=Task.sort_entries)
     overall_entries = task.entries
-    ab_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='EN-A' OR glider_class='EN-B')")
-    c_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND glider_class='EN-C'")
-    hot_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='EN-D' OR glider_class='EN-CCC')")
-    special_entries=_get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='Mini' OR glider_class='Parakite')")
+    ab_entries = _get_entries(
+        f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='EN-A' OR glider_class='EN-B')")
+    c_entries = _get_entries(f"SELECT * FROM entry WHERE task_id={task.id} AND glider_class='EN-C'")
+    hot_entries = _get_entries(
+        f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='EN-D' OR glider_class='EN-CCC')")
+    special_entries = _get_entries(
+        f"SELECT * FROM entry WHERE task_id={task.id} AND (glider_class='Mini' OR glider_class='Parakite')")
 
-    return render_template('tasks/detail.html', task=task, entry=entry, category_entries=[
-        {"id": "overall", "name": "Overall", "entries": overall_entries},
-        {"id": "ab", "name": "EN-A / EN-B", "entries": ab_entries},
-        {"id": "c", "name": "EN-C", "entries": c_entries},
-        {"id": "dccc", "name": "EN-D / CCC", "entries": hot_entries},
-        {"id": "cool", "name": "Cool Kids", "entries": special_entries}
-    ])
+    now = datetime.datetime.now(tz=ZoneInfo('America/Los_Angeles'))
+    now = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
+    return render_template(
+        'tasks/detail.html',
+        task=task,
+        task_open=(task.end >= now),
+        entry=entry,
+        category_entries=[
+            {"id": "overall", "name": "Overall", "entries": overall_entries},
+            {"id": "ab", "name": "EN-A / EN-B", "entries": ab_entries},
+            {"id": "c", "name": "EN-C", "entries": c_entries},
+            {"id": "dccc", "name": "EN-D / CCC", "entries": hot_entries},
+            {"id": "cool", "name": "Cool Kids", "entries": special_entries}
+        ]
+    )
 
 
 def _get_entries(query: str) -> list[Entry]:
@@ -145,7 +158,7 @@ def _process_flight(
     new_entry.glider_class = glider_class
 
     query = f"SELECT * FROM entry WHERE task_id=:task_id AND glider_class=:glider_class AND name like LOWER(:name)"
-    existing =db.session.query(Entry).from_statement(text(query)).params(
+    existing = db.session.query(Entry).from_statement(text(query)).params(
         task_id=task.id,
         glider_class=glider_class,
         name=new_entry.name.lower()
