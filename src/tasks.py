@@ -11,7 +11,7 @@ from geopy import distance
 from sqlalchemy import text
 from werkzeug.utils import secure_filename
 
-import services.task as task_service
+import src.services.task as task_service
 from src.db import db
 from src.models.entry import Entry
 from src.models.task import Task
