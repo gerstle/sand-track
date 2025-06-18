@@ -135,8 +135,7 @@
                 <div id="collapse-qrcode" class="accordion-collapse collapse" data-bs-parent="#accordion-qrcode">
                     <div class="accordion-body">
                         <div class="col col-md-12 col-lg-4 mx-auto">
-                            <img class="img-fluid rounded" src="{{ url_for('static', filename='img/task-may-qr.png') }}"
-                                 alt="QR code">
+                            <img class="img-fluid rounded" src="{{ url_for('tasks.qrcode', task_id=task.id) }}" alt="QR code">
                         </div>
                     </div>
                 </div>
