@@ -18,6 +18,7 @@ class Task(db.Model):
     description: Mapped[Optional[str]]
     start: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     end: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    submissions_closed: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     turnpoints: Mapped[List["Turnpoint"]] = relationship(back_populates="task", order_by="Turnpoint.order.asc()")
     entries: Mapped[List["Entry"]] = relationship(back_populates="task")
 
