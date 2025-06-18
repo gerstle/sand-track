@@ -1,0 +1,14 @@
+XCTSK:{
+  "taskType": "CLASSIC",
+  "version": 2,
+  "t": {{ turnpoint_json }},
+  "s": {
+    "t": 1,
+    "g": [
+      "13:00:00Z"
+    ]
+  },
+  "g": {
+    "t": 2
+  }
+}

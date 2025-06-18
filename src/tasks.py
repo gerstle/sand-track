@@ -1,14 +1,17 @@
 import datetime
+import io
+import logging
 import os
 from enum import Enum
 from typing import Tuple
 from zoneinfo import ZoneInfo
 
-from flask import Blueprint, request, render_template, flash, redirect, url_for, current_app
+from flask import Blueprint, request, render_template, flash, redirect, url_for, current_app, make_response, send_file
 from geopy import distance
 from sqlalchemy import text
 from werkzeug.utils import secure_filename
 
+import services.task as task_service
 from src.db import db
 from src.models.entry import Entry
 from src.models.task import Task
@@ -17,6 +20,7 @@ from src.models.turnpoint import Turnpoint
 ALLOWED_EXTENSIONS = {'igc'}
 
 tasks_bp = Blueprint('tasks', __name__, url_prefix='/tasks')
+logger = logging.getLogger(__name__)
 
 
 @tasks_bp.route('/')
@@ -29,6 +33,29 @@ def index():
         past_tasks=db.session.query(Task).order_by(Task.id.desc()).filter(Task.end < now).all(),
     )
 
+# TODO: remove this route? gonna leave for now
+@tasks_bp.route('/<int:task_id>/qrcode-content')
+def qrcode_content(task_id: int):
+    task = db.session.query(Task).get(task_id)
+    if task is None:
+        flash("Task not found")
+        return index()
+
+    response = make_response(task_service.generate_doc(task), 200)
+    response.mimetype = "text/plain"
+    return response
+
+@tasks_bp.route('/<int:task_id>/qrcode')
+def qrcode(task_id: int):
+    task = db.session.query(Task).get(task_id)
+    if task is None:
+        flash("Task not found")
+        return index()
+
+    return send_file(
+        io.BytesIO(task_service.generate_qrcode(task)),
+        mimetype='image/png'
+    )
 
 @tasks_bp.route('/<int:task_id>')
 def detail(task_id: int):
